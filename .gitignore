@@ -1,0 +1,6 @@
+# Sistema Mac
+.DS_Store
+**/.DS_Store
+
+# Configuración Claude Code
+.claude/

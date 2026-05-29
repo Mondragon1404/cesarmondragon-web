@@ -1,0 +1,119 @@
+/*
+ * César Mondragón — Design Tokens
+ * Fuente de verdad: todos los valores del sistema visual.
+ * Importar en cualquier proyecto para mantener coherencia de marca.
+ */
+
+:root {
+  /* ── COLORS ─────────────────────────────────────────────── */
+
+  /* Brand */
+  --color-black:      #0A0A0A;
+  --color-white:      #FFFFFF;
+  --color-red-600:    #A61C1C;   /* primario */
+  --color-red-800:    #8B1717;   /* hover / énfasis */
+  --color-red-100:    #FEE2E2;   /* fondos suaves */
+
+  /* Neutrales */
+  --color-neutral-0:   #FFFFFF;
+  --color-neutral-50:  #F5F5F5;
+  --color-neutral-100: #E5E5E5;
+  --color-neutral-400: #999999;
+  --color-neutral-600: #666666;  /* texto secundario — pasa WCAG AA 5.5:1 */
+  --color-neutral-900: #1A1A1A;
+  --color-neutral-950: #0A0A0A;
+
+  /* Estado */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error:   #ef4444;
+  --color-info:    #3b82f6;
+
+  /* Alias semánticos */
+  --color-primary:    var(--color-red-600);
+  --color-primary-hover: var(--color-red-800);
+  --color-text:       var(--color-neutral-950);
+  --color-text-muted: var(--color-neutral-600);
+  --color-bg:         var(--color-neutral-0);
+  --color-border:     var(--color-neutral-100);
+
+  /* ── TYPOGRAPHY ─────────────────────────────────────────── */
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Escala 1.25 (Major Third) */
+  --text-xs:   0.64rem;    /*  ~10px */
+  --text-sm:   0.8rem;     /*  ~13px */
+  --text-base: 1rem;       /*   16px */
+  --text-lg:   1.25rem;    /*   20px */
+  --text-xl:   1.563rem;   /*   25px */
+  --text-2xl:  1.953rem;   /*   31px */
+  --text-3xl:  2.441rem;   /*   39px */
+  --text-4xl:  3.052rem;   /*   49px */
+  --text-5xl:  3.815rem;   /*   61px */
+
+  /* Peso */
+  --weight-light:    300;
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+  --weight-black:    900;
+
+  /* ── SPACING (escala 4px) ───────────────────────────────── */
+
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-30: 120px;
+
+  /* ── BORDER RADIUS ──────────────────────────────────────── */
+
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-full: 9999px;
+
+  /* ── SHADOWS ────────────────────────────────────────────── */
+
+  --shadow-sm:  0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md:  0 4px 6px rgba(0,0,0,0.07);
+  --shadow-lg:  0 10px 15px rgba(0,0,0,0.10);
+  --shadow-xl:  0 20px 40px rgba(0,0,0,0.14);
+
+  /* ── TRANSITIONS ────────────────────────────────────────── */
+
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast:   0.2s;
+  --duration-base:   0.3s;
+  --duration-slow:   0.5s;
+
+  /* ── Z-INDEX ────────────────────────────────────────────── */
+
+  --z-base:     0;
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-overlay:  300;
+  --z-modal:    400;
+  --z-toast:    500;
+  --z-cursor:   9999;
+}
+
+/* ── DARK MODE ──────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --color-text:       var(--color-neutral-0);
+  --color-text-muted: var(--color-neutral-400);
+  --color-bg:         var(--color-neutral-950);
+  --color-border:     #222222;
+}

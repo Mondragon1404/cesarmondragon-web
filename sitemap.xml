@@ -1,10 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>https://cesarmondragon.com/</loc>
-        <lastmod>2026-05-22</lastmod>
+        <lastmod>2026-05-30</lastmod>
         <changefreq>monthly</changefreq>
         <priority>1.0</priority>
+        <image:image>
+            <image:loc>https://cesarmondragon.com/assets/foto-cesar-mondragon.webp</image:loc>
+            <image:title>César Mondragón — Diseñador Freelance en Barcelona</image:title>
+            <image:caption>Diseñador freelance en Barcelona especializado en branding, UX/UI, Shopify y automatización con IA.</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://cesarmondragon.com/assets/proyecto-branding-faneti.webp</image:loc>
+            <image:title>Faneti — Proyecto de Branding e Identidad Visual</image:title>
+            <image:caption>Desarrollo de identidad visual estratégica para la marca Faneti.</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://cesarmondragon.com/assets/proyecto-uxui-highclass.webp</image:loc>
+            <image:title>Highclass — Proyecto de Diseño UX/UI</image:title>
+            <image:caption>Diseño de experiencia de usuario e interfaz para Highclass.</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://cesarmondragon.com/assets/proyecto-shopify-volzari.webp</image:loc>
+            <image:title>Volzari — Diseño y Optimización de Tienda Shopify</image:title>
+            <image:caption>Diseño y optimización de tienda Shopify para Volzari.</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://cesarmondragon.com/assets/proyecto-landing-dulcinea.webp</image:loc>
+            <image:title>Dulcinea — Landing Page de Conversión</image:title>
+            <image:caption>Landing page optimizada para conversión diseñada para Dulcinea.</image:caption>
+        </image:image>
     </url>
     <url>
         <loc>https://cesarmondragon.com/aviso-legal.html</loc>

@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /api/
 
 Sitemap: https://cesarmondragon.com/sitemap.xml
+LLMs: https://cesarmondragon.com/llms.txt

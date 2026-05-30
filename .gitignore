@@ -4,3 +4,11 @@
 
 # Configuración Claude Code
 .claude/
+.agents/
+skills-lock.json
+
+# Node / npm (usado para conversión de imágenes)
+node_modules/
+assets/node_modules/
+assets/package.json
+assets/package-lock.json

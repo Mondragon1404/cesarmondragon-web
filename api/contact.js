@@ -28,36 +28,28 @@ module.exports = async function handler(req, res) {
     mensaje,
   } = req.body;
 
-  const fields = {};
-  fields['Fuente del lead']                          = 'Web';
-  if (nombre)        fields['Nombre']               = nombre;
-  if (empresa)       fields['Empresa']              = empresa;
-  if (email)         fields['Email']                = email;
-  if (whatsapp)      fields['WhatsApp']             = whatsapp;
-  if (web_instagram) fields['Web o Instagram']       = web_instagram;
-  if (tipo_negocio)  fields['Tipo de negocio']      = tipo_negocio;
-  if (presupuesto)   fields['Presupuesto']          = presupuesto;
-  if (mensaje)       fields['Mensaje']              = mensaje;
-  if (servicios && (Array.isArray(servicios) ? servicios.length : servicios)) {
-    fields['Servicios Interesados'] = Array.isArray(servicios) ? servicios : [servicios];
-  }
-
   try {
-    const airtableRes = await fetch(
-      `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${encodeURIComponent(process.env.AIRTABLE_TABLE_NAME)}`,
+    const n8nRes = await fetch(
+      'https://mondragon-n8n.4ucpgb.easypanel.host/webhook/crm-lead-web',
       {
         method: 'POST',
-        headers: {
-          Authorization:  `Bearer ${process.env.AIRTABLE_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ fields }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre,
+          empresa,
+          correo: email,
+          email,
+          whatsapp,
+          web_instagram,
+          tipo_negocio,
+          presupuesto,
+          servicios: Array.isArray(servicios) ? servicios : (servicios ? [servicios] : []),
+          mensaje,
+        }),
       }
     );
 
-    const data = await airtableRes.json();
-
-    if (!airtableRes.ok) {
+    if (!n8nRes.ok) {
       return res.status(500).json({ error: 'Error al guardar el lead' });
     }
 

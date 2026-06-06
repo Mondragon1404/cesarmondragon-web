@@ -134,7 +134,7 @@ module.exports = async function handler(req, res) {
       await sendEmail({
         from,
         to: businessEmail,
-        subject: `Nuevo lead: ${nombre || 'sin nombre'} — ${empresa || email || ''}`,
+        subject: `Nuevo lead: ${nombre || 'sin nombre'}${empresa ? ' · ' + empresa : ''}`,
         html: `
           <div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#222">
             <h2 style="color:#111">Nuevo contacto desde la web</h2>

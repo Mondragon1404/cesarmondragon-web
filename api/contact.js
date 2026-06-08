@@ -1,3 +1,74 @@
+function emailBase(nombre, bodyRows) {
+  return `<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background-color:#0A0A0A;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0A0A0A;padding:48px 16px">
+    <tr><td align="center">
+      <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px">
+        <tr><td style="padding-bottom:40px">
+          <span style="font-family:'Inter',sans-serif;font-size:18px;font-weight:700;color:#FFFFFF;letter-spacing:0.05em">CM</span>
+        </td></tr>
+        <tr><td style="padding-bottom:32px">
+          <div style="width:32px;height:2px;background-color:#A61C1C"></div>
+        </td></tr>
+        <tr><td style="color:#FFFFFF;font-size:16px;line-height:1.75">
+          <p style="margin:0 0 20px">Hola ${nombre || ''},</p>
+          ${bodyRows}
+        </td></tr>
+        <tr><td style="border-top:1px solid #222222;padding-top:32px">
+          <p style="margin:0 0 4px;color:#FFFFFF;font-size:15px;font-weight:600">César Mondragón</p>
+          <p style="margin:0;color:#666666;font-size:13px">Diseño, automatización e inteligencia artificial para negocios que quieren crecer.</p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+}
+
+function emailPriority(nombre) {
+  return emailBase(nombre, `
+    <p style="margin:0 0 20px">Gracias por escribirme. He recibido correctamente tu solicitud y revisaré la información de tu proyecto para entender mejor cómo puedo ayudarte.</p>
+    <p style="margin:0 0 20px">Trabajo ayudando a marcas y negocios a mejorar su presencia digital mediante diseño, automatización e inteligencia artificial, por lo que cada proyecto requiere una solución adaptada a sus objetivos y necesidades.</p>
+    <p style="margin:0 0 24px">Para avanzar más rápido y entender mejor tu caso, puedes reservar directamente una llamada conmigo:</p>
+    </td></tr>
+    <tr><td style="padding-bottom:32px">
+      <a href="https://calendly.com/cesar-cesarmondragon/30min" target="_blank"
+        style="display:inline-block;background-color:#A61C1C;color:#FFFFFF;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;text-decoration:none;padding:14px 28px;border-radius:4px">
+        Reservar una llamada →
+      </a>
+    </td></tr>
+    <tr><td style="color:#FFFFFF;font-size:16px;line-height:1.75;padding-bottom:32px">
+      <p style="margin:0 0 12px">Durante la llamada podremos revisar:</p>
+      <table cellpadding="0" cellspacing="0">
+        <tr><td style="color:#A61C1C;padding-right:10px;vertical-align:top">•</td><td style="color:#FFFFFF;padding-bottom:6px">Tu negocio y objetivos</td></tr>
+        <tr><td style="color:#A61C1C;padding-right:10px;vertical-align:top">•</td><td style="color:#FFFFFF;padding-bottom:6px">Los principales problemas o bloqueos actuales</td></tr>
+        <tr><td style="color:#A61C1C;padding-right:10px;vertical-align:top">•</td><td style="color:#FFFFFF;padding-bottom:6px">Posibles oportunidades de mejora</td></tr>
+        <tr><td style="color:#A61C1C;padding-right:10px;vertical-align:top">•</td><td style="color:#FFFFFF;padding-bottom:6px">Qué solución podría encajar mejor para ti</td></tr>
+      </table>
+    </td></tr>
+    <tr><td style="color:#FFFFFF;font-size:16px;line-height:1.75;padding-bottom:40px">
+      <p style="margin:0">Mientras tanto, si quieres añadir más información sobre tu proyecto, puedes responder directamente a este correo.</p>
+  `);
+}
+
+function emailStandard(nombre) {
+  return emailBase(nombre, `
+    <p style="margin:0 0 20px">Gracias por escribirme. He recibido correctamente tu solicitud y la revisaré personalmente en las próximas horas.</p>
+    <p style="margin:0 0 20px">Cada proyecto es diferente, así que antes de proponerte nada quiero entender bien tu situación y asegurarme de que lo que puedo ofrecerte tiene sentido real para ti.</p>
+    <p style="margin:0 0 20px">Me pondré en contacto contigo directamente para hablar sobre tu caso. Si mientras tanto quieres contarme algo más sobre tu proyecto — contexto, urgencia, lo que sea — puedes responder directamente a este correo y lo tendré en cuenta.</p>
+    <p style="margin:0 0 40px">Hablamos pronto.</p>
+  `);
+}
+
+function isPriorityLead({ empresa, presupuesto, servicios }) {
+  if (presupuesto === 'Menos de 500 EUR') return false;
+  const serviciosList = Array.isArray(servicios) ? servicios : (servicios ? [servicios] : []);
+  if (!empresa && serviciosList.length === 0) return false;
+  return true;
+}
+
 async function sendEmail({ from, to, subject, html }) {
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -61,80 +132,27 @@ module.exports = async function handler(req, res) {
 
     // Correo de confirmación al cliente
     if (email && from) {
+      const priority = isPriorityLead({ empresa, presupuesto, servicios });
+      const emailHtml = priority
+        ? emailPriority(nombre)
+        : emailStandard(nombre);
+
       await sendEmail({
         from,
         to: email,
         subject: 'He recibido tu solicitud',
-        html: `<!DOCTYPE html>
-<html lang="es">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background-color:#0A0A0A;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0A0A0A;padding:48px 16px">
-    <tr><td align="center">
-      <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px">
-
-        <!-- Logo -->
-        <tr><td style="padding-bottom:40px">
-          <span style="font-family:'Inter',sans-serif;font-size:18px;font-weight:700;color:#FFFFFF;letter-spacing:0.05em">CM</span>
-        </td></tr>
-
-        <!-- Divisor rojo -->
-        <tr><td style="padding-bottom:32px">
-          <div style="width:32px;height:2px;background-color:#A61C1C"></div>
-        </td></tr>
-
-        <!-- Cuerpo -->
-        <tr><td style="color:#FFFFFF;font-size:16px;line-height:1.75">
-          <p style="margin:0 0 20px">Hola ${nombre || ''},</p>
-          <p style="margin:0 0 20px">Gracias por escribirme. He recibido correctamente tu solicitud y revisaré la información de tu proyecto para entender mejor cómo puedo ayudarte.</p>
-          <p style="margin:0 0 20px">Trabajo ayudando a marcas y negocios a mejorar su presencia digital mediante diseño, automatización e inteligencia artificial, por lo que cada proyecto requiere una solución adaptada a sus objetivos y necesidades.</p>
-          <p style="margin:0 0 24px">Para avanzar más rápido y entender mejor tu caso, puedes reservar directamente una llamada conmigo:</p>
-        </td></tr>
-
-        <!-- Botón Calendly -->
-        <tr><td style="padding-bottom:32px">
-          <a href="https://calendly.com/cesar-cesarmondragon/30min" target="_blank"
-            style="display:inline-block;background-color:#A61C1C;color:#FFFFFF;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;text-decoration:none;padding:14px 28px;border-radius:4px">
-            Reservar una llamada →
-          </a>
-        </td></tr>
-
-        <!-- Lista -->
-        <tr><td style="color:#FFFFFF;font-size:16px;line-height:1.75;padding-bottom:32px">
-          <p style="margin:0 0 12px">Durante la llamada podremos revisar:</p>
-          <table cellpadding="0" cellspacing="0">
-            <tr><td style="color:#A61C1C;padding-right:10px;vertical-align:top">•</td><td style="color:#FFFFFF;padding-bottom:6px">Tu negocio y objetivos</td></tr>
-            <tr><td style="color:#A61C1C;padding-right:10px;vertical-align:top">•</td><td style="color:#FFFFFF;padding-bottom:6px">Los principales problemas o bloqueos actuales</td></tr>
-            <tr><td style="color:#A61C1C;padding-right:10px;vertical-align:top">•</td><td style="color:#FFFFFF;padding-bottom:6px">Posibles oportunidades de mejora</td></tr>
-            <tr><td style="color:#A61C1C;padding-right:10px;vertical-align:top">•</td><td style="color:#FFFFFF;padding-bottom:6px">Qué solución podría encajar mejor para ti</td></tr>
-          </table>
-        </td></tr>
-
-        <tr><td style="color:#FFFFFF;font-size:16px;line-height:1.75;padding-bottom:40px">
-          <p style="margin:0">Mientras tanto, si quieres añadir más información sobre tu proyecto, puedes responder directamente a este correo.</p>
-        </td></tr>
-
-        <!-- Firma -->
-        <tr><td style="border-top:1px solid #222222;padding-top:32px">
-          <p style="margin:0 0 4px;color:#FFFFFF;font-size:15px;font-weight:600">César Mondragón</p>
-          <p style="margin:0;color:#666666;font-size:13px">Diseño, automatización e inteligencia artificial para negocios que quieren crecer.</p>
-        </td></tr>
-
-      </table>
-    </td></tr>
-  </table>
-</body>
-</html>`,
+        html: emailHtml,
       });
     }
 
     // Notificación al negocio
     const businessEmail = process.env.BUSINESS_EMAIL;
     if (businessEmail && from) {
+      const priority = isPriorityLead({ empresa, presupuesto, servicios });
       await sendEmail({
         from,
         to: businessEmail,
-        subject: `Nuevo lead: ${nombre || 'sin nombre'}${empresa ? ' · ' + empresa : ''}`,
+        subject: `${priority ? '⭐ ' : ''}Nuevo lead: ${nombre || 'sin nombre'}${empresa ? ' · ' + empresa : ''}`,
         html: `
           <div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#222">
             <h2 style="color:#111">Nuevo contacto desde la web</h2>

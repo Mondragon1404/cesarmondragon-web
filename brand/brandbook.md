@@ -221,10 +221,75 @@ Los tokens semánticos cambian automáticamente con `[data-theme="dark"]`. Los �
 Sin familia de iconos definida en v1.0. En v2.0 adoptar **Lucide** (MIT, SVG, coherente con Inter).
 Mientras tanto: solo Unicode semántico (↗ para "abrir/ir", + para "expandir", × para "cerrar"). **No mezclar familias.**
 
-### Estilo de imagen
+### Paleta de fotografía
 
-Fotografía de producto / mockup de marca — fondo neutro o negro.
-Sin ilustraciones ni 3D. Consistencia editorial: colores apagados o contraste alto.
+El sistema visual de César usa tres tipos de imagen con reglas distintas. No mezclar estilos entre tipos.
+
+---
+
+#### Tipo A — Mockup de proyecto (portfolio)
+
+Es la imagen principal de cada caso de estudio. Muestra el entregable en contexto de uso real.
+
+**Referencia:** `proyecto-branding-faneti.webp`, `proyecto-uxui-highclass.webp`, `proyecto-shopify-volzari.webp`, `proyecto-landing-dulcinea.webp`
+
+**Reglas:**
+- Fondo: blanco o neutro muy claro (`#F5F5F5` máx). Nunca fondo oscuro ni de color.
+- Composición: múltiples dispositivos en grid (laptop + móvil como mínimo; añadir tablet si el proyecto lo justifica).
+- Paleta del mockup: respeta los colores del cliente, no imponer el rojo de marca CM.
+- Ratio: 16:9 landscape para tarjetas de proyecto en web.
+- Calidad: mínimo 1400px de ancho. Sin compresión visible.
+- Tratamiento de color: sin filtros ni LUT. Colores fieles al entregable real.
+
+**No hacer:**
+- Fondos de pantalla o texturas detrás del mockup.
+- Dispositivos con marcos excesivamente exagerados o irreales.
+- Añadir el logo CM sobre la imagen del proyecto — la autoría va en el caption.
+- Stock de dispositivos con pantallas en blanco — siempre mostrar el trabajo real.
+
+---
+
+#### Tipo B — Retrato personal
+
+Foto de César como diseñador. Transmite autoridad técnica, no corporativismo.
+
+**Referencia:** `foto-cesar-mondragon.webp`
+
+**Características del estilo establecido:**
+- Contexto: espacio de trabajo real visible (pantallas con trabajo activo, setup técnico).
+- Ropa: negro preferiblemente — coherente con la identidad de marca oscura.
+- Pose: mirada directa a cámara. Natural, "en el trabajo", no posado de estudio.
+- Iluminación: cálida (lámpara de escritorio) + luz de pantallas. No flash de estudio frío.
+- Fondo: desenfocado pero con información visible (herramientas, pantallas, contexto real).
+- Colores dominantes del fondo: negro, azul de pantallas, madera cálida.
+
+**Nuevas fotos deben mantener:**
+- Misma temperatura de color cálida-neutra.
+- Ropa oscura (negro o gris oscuro).
+- Setup visible como contexto, no fondo neutro liso.
+- Formato vertical (portrait) para hero/about. Horizontal (landscape) para banners.
+
+---
+
+#### Tipo C — Proceso y behind the scenes
+
+Imágenes de trabajo en progreso: flujos de automatización, wireframes, sistemas de diseño. Úselas para contenido de redes o artículos.
+
+**Reglas:**
+- Capturas de pantalla de herramientas reales (Figma, n8n, Notion, etc.) — sin mockear.
+- Resolución suficiente para que el contenido de la pantalla sea legible.
+- Fondo: la propia interfaz de la herramienta. No componer sobre fondo externo.
+- No oscurecer ni añadir overlay — si el contenido es sensible, recortar antes de capturar.
+
+---
+
+#### Lo que nunca entra en el sistema
+
+- Stock photos de personas desconocidas representando "clientes" o "equipos".
+- Ilustraciones o imágenes 3D generadas (ya cubierto en sección anterior).
+- Imágenes con texto sobreimpreso en tipografía ajena al sistema (sin Inter ni Fraunces).
+- Filtros Instagram, viñetas, efectos de luz artificiosos.
+- Fondos de color saturado detrás de cualquier tipo de imagen.
 
 ---
 
@@ -259,4 +324,4 @@ Sin ilustraciones ni 3D. Consistencia editorial: colores apagados o contraste al
 - [x] Dark mode documentado
 - [ ] Ejemplos visuales correcto/incorrecto (pendiente diseño)
 - [ ] Adoptar Lucide como familia de iconos en v2.0
-- [ ] Definir paleta de fotografía con ejemplos reales de proyectos
+- [x] Definir paleta de fotografía con ejemplos reales de proyectos (Tipo A/B/C)

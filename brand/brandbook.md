@@ -92,11 +92,129 @@
 
 ### Escala tipográfica (ratio 1.25 — Major Third)
 
-Ver `tokens.css` para valores completos.
+| Token | rem | px aprox | Uso |
+|---|---|---|---|
+| `--text-xs` | 0.64rem | ~10px | Microcopy, badges, timestamps |
+| `--text-sm` | 0.8rem | ~13px | Labels, captions, texto de soporte |
+| `--text-base` | 1rem | 16px | Cuerpo de texto, párrafos, UI general |
+| `--text-lg` | 1.25rem | ~20px | Lead/intro, citas cortas |
+| `--text-xl` | 1.563rem | ~25px | Subtítulos de sección (H3) |
+| `--text-2xl` | 1.953rem | ~31px | Títulos de sección (H2) |
+| `--text-3xl` | 2.441rem | ~39px | Títulos de página (H1 en móvil) |
+| `--text-4xl` | 3.052rem | ~49px | Hero headings (H1 en desktop) |
+| `--text-5xl` | 3.815rem | ~61px | Display puro — portadas, números grandes |
+
+**Regla de familia:** `--text-xl` hacia arriba → Fraunces (serif). `--text-lg` hacia abajo → Inter (sans).
+
+**Line-height recomendado:** Display (`4xl`–`5xl`) → 1.1. Títulos (`2xl`–`3xl`) → 1.2. Cuerpo (`base`–`lg`) → 1.6–1.7.
 
 ### Espaciado
 
-Escala base 4px. Ver `tokens.css` para valores completos.
+Escala base 4px. Referencia semántica:
+
+| Token | Valor | Uso típico |
+|---|---|---|
+| `--space-1` | 4px | Separación interna mínima (icon + texto) |
+| `--space-2` | 8px | Padding de badge, gap entre items inline |
+| `--space-3` | 12px | Padding interno de botón (eje vertical) |
+| `--space-4` | 16px | Padding de componentes (cards, inputs) |
+| `--space-6` | 24px | Gap entre elementos de formulario, margin entre párrafos |
+| `--space-8` | 32px | Padding de sección pequeña, separación entre bloques |
+| `--space-10` | 40px | Margen entre secciones en móvil |
+| `--space-12` | 48px | Padding vertical de sección en móvil |
+| `--space-16` | 64px | Padding de sección en desktop |
+| `--space-20` | 80px | Separación entre secciones grandes |
+| `--space-24` | 96px | Padding hero en desktop |
+| `--space-30` | 120px | Máximo — espaciado de hero muy abierto |
+
+**Regla:** Nunca usar valores arbitrarios. Si ningún token encaja, revisar si el diseño es correcto antes de crear un valor nuevo.
+
+### Colores de estado
+
+| Token | HEX | Uso |
+|---|---|---|
+| `--color-success` | `#10B981` | Confirmaciones, formularios válidos, éxito de acción |
+| `--color-warning` | `#F59E0B` | Alertas suaves, advertencias no críticas |
+| `--color-error` | `#EF4444` | Errores de validación, acciones destructivas |
+| `--color-info` | `#3B82F6` | Mensajes informativos, tooltips |
+
+**Regla:** Los colores de estado solo aparecen en contexto funcional (feedback de formulario, notificaciones). Nunca usarlos como decorativos ni como sustituto del rojo de marca.
+
+### Tokens semánticos (alias)
+
+Los alias son la capa que se usa en código, no los valores hexadecimales directos. Garantizan que dark mode y futuros cambios de paleta no requieran tocar componente a componente.
+
+| Alias | Resuelve a | Qué representa |
+|---|---|---|
+| `--color-primary` | `--color-red-600` | Acento principal, CTA |
+| `--color-primary-hover` | `--color-red-800` | Estado hover del primario |
+| `--color-text` | `#0A0A0A` | Texto principal |
+| `--color-text-muted` | `#666666` | Texto secundario, placeholders, captions |
+| `--color-bg` | `#FFFFFF` | Fondo base de la página |
+| `--color-border` | `#E5E5E5` | Bordes de cards, inputs, divisores |
+
+**Regla:** En componentes, siempre usar el alias (`--color-text`) nunca el hex directo ni el token de paleta (`--color-neutral-950`).
+
+### Border radius
+
+| Token | Valor | Uso |
+|---|---|---|
+| `--radius-sm` | 4px | Badges, tags, tooltips |
+| `--radius-md` | 8px | Inputs, botones (por defecto) |
+| `--radius-lg` | 12px | Cards, modales, dropdowns |
+| `--radius-xl` | 16px | Cards destacadas, banners |
+| `--radius-full` | 9999px | Pills, avatares circulares |
+
+**Estilo de marca:** El sistema es funcional pero no redondeado en exceso. `--radius-md` es el valor por defecto para la mayoría de elementos interactivos.
+
+### Sombras
+
+| Token | Uso |
+|---|---|
+| `--shadow-sm` | Elevación mínima — inputs en focus, separación sutil |
+| `--shadow-md` | Cards, dropdowns en reposo |
+| `--shadow-lg` | Cards en hover, paneles flotantes |
+| `--shadow-xl` | Modales, drawers, overlays |
+
+**Regla:** Las sombras deben comunicar elevación, no decoración. Evitar `--shadow-xl` en elementos que no sean capas superiores reales (modal, overlay).
+
+### Motion
+
+| Token | Valor | Uso |
+|---|---|---|
+| `--ease-out` | `cubic-bezier(0.4, 0, 0.2, 1)` | Todas las transiciones de UI |
+| `--duration-fast` | 0.2s | Hover, focus, micro-interacciones |
+| `--duration-base` | 0.3s | Aperturas de dropdown, cambios de estado |
+| `--duration-slow` | 0.5s | Animaciones de entrada de sección, modales |
+
+**Regla:** Siempre usar `--ease-out`. Nunca `linear` para interacciones de usuario. Respetar `prefers-reduced-motion` deshabilitando transiciones no esenciales.
+
+### Z-index
+
+| Token | Valor | Capa |
+|---|---|---|
+| `--z-base` | 0 | Contenido estático |
+| `--z-dropdown` | 100 | Dropdowns, tooltips |
+| `--z-sticky` | 200 | Headers fijos, barras de navegación |
+| `--z-overlay` | 300 | Fondos de modal (backdrop) |
+| `--z-modal` | 400 | Modales, drawers |
+| `--z-toast` | 500 | Notificaciones toast |
+| `--z-cursor` | 9999 | Cursor personalizado |
+
+### Dark mode
+
+Los tokens semánticos cambian automáticamente con `[data-theme="dark"]`. Los únicos que varían:
+
+| Alias | Light | Dark |
+|---|---|---|
+| `--color-text` | `#0A0A0A` | `#FFFFFF` |
+| `--color-text-muted` | `#666666` | `#999999` |
+| `--color-bg` | `#FFFFFF` | `#0A0A0A` |
+| `--color-border` | `#E5E5E5` | `#222222` |
+
+**Regla:** El rojo de marca (`--color-primary`) no cambia entre modos. Las imágenes y fotografías no requieren tratamiento especial — el estilo de fondo neutro/negro funciona en ambos modos.
+
+---
 
 ### Iconografía
 
@@ -134,6 +252,11 @@ Sin ilustraciones ni 3D. Consistencia editorial: colores apagados o contraste al
 - [x] 2 familias tipográficas con licencia clara (Google Fonts — SIL Open Font)
 - [x] Tokens CSS exportables (`brand/tokens.css`)
 - [x] Brandbook en Markdown, versionable en Git
+- [x] Escala tipográfica documentada con uso semántico
+- [x] Escala de espaciado documentada con uso semántico
+- [x] Colores de estado y alias semánticos documentados
+- [x] Border radius, sombras, motion y z-index documentados
+- [x] Dark mode documentado
 - [ ] Ejemplos visuales correcto/incorrecto (pendiente diseño)
 - [ ] Adoptar Lucide como familia de iconos en v2.0
 - [ ] Definir paleta de fotografía con ejemplos reales de proyectos

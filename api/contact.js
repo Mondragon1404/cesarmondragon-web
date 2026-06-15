@@ -34,7 +34,7 @@ function emailPriority(nombre) {
     <p style="margin:0 0 24px">Para avanzar más rápido y entender mejor tu caso, puedes reservar directamente una llamada conmigo:</p>
     </td></tr>
     <tr><td style="padding-bottom:32px">
-      <a href="https://calendly.com/cesar-cesarmondragon/30min" target="_blank"
+      <a href="https://cal.com/cesar-mondragon/30min" target="_blank"
         style="display:inline-block;background-color:#A61C1C;color:#FFFFFF;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;text-decoration:none;padding:14px 28px;border-radius:4px">
         Reservar una llamada →
       </a>

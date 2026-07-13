@@ -482,8 +482,25 @@
             line-height: 1.65;
             font-weight: 300;
             flex: 1;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
+
+        .servicio-card-price {
+            font-size: 12px;
+            font-weight: 300;
+            color: var(--color-neutral-400);
+            letter-spacing: 0.04em;
+            margin-bottom: 18px;
+        }
+
+        .servicio-card-price strong {
+            font-weight: 700;
+            color: var(--color-white);
+            letter-spacing: -0.01em;
+            transition: color 0.25s;
+        }
+
+        .servicio-card:hover .servicio-card-price strong { color: var(--color-primary); }
 
         .servicio-card-link {
             font-size: 11px;

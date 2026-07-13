@@ -411,36 +411,44 @@
         <div class="label">Trabajos</div>
         <h2 class="trabajos-title reveal">Proyectos</h2>
         <div class="trabajos-grid">
-            <div class="trabajo" role="button" tabindex="0" aria-label="Ver proyecto Faneti — Branding e Identidad Visual">
+            <div class="trabajo" role="button" tabindex="0" data-case="faneti" aria-label="Ver caso de estudio: Faneti — Branding e Identidad Visual">
                 <img src="assets/proyecto-branding-faneti.webp" alt="Faneti — Proyecto de Branding e Identidad Visual" loading="lazy" width="800" height="500">
                 <div class="trabajo-overlay"></div>
                 <div class="trabajo-info">
                     <div class="trabajo-cat">Branding</div>
                     <h3 class="trabajo-title">Faneti — Branding e Identidad Visual</h3>
+                    <p class="trabajo-result">Branding desarrollado de principio a fin</p>
+                    <span class="trabajo-cta">Ver caso de estudio →</span>
                 </div>
             </div>
-            <div class="trabajo" role="button" tabindex="0" aria-label="Ver proyecto Highclass — Diseño UX/UI">
+            <div class="trabajo" role="button" tabindex="0" data-case="highclass" aria-label="Ver caso de estudio: Highclass — Diseño UX/UI">
                 <img src="assets/proyecto-uxui-highclass.webp" alt="Highclass — Proyecto de Diseño UX/UI" loading="lazy" width="800" height="500">
                 <div class="trabajo-overlay"></div>
                 <div class="trabajo-info">
                     <div class="trabajo-cat">UX/UI</div>
                     <h3 class="trabajo-title">Highclass — Diseño UX/UI</h3>
+                    <p class="trabajo-result">30+ pantallas diseñadas y prototipadas</p>
+                    <span class="trabajo-cta">Ver caso de estudio →</span>
                 </div>
             </div>
-            <div class="trabajo" role="button" tabindex="0" aria-label="Ver proyecto Volzari — Shopify">
+            <div class="trabajo" role="button" tabindex="0" data-case="volzari" aria-label="Ver caso de estudio: Volzari — Shopify">
                 <img src="assets/proyecto-shopify-volzari.webp" alt="Volzari — Diseño y Optimización de Tienda Shopify" loading="lazy" width="800" height="500">
                 <div class="trabajo-overlay"></div>
                 <div class="trabajo-info">
                     <div class="trabajo-cat">Shopify</div>
                     <h3 class="trabajo-title">Volzari — Shopify & E-commerce</h3>
+                    <p class="trabajo-result">Tienda Shopify creada de principio a fin</p>
+                    <span class="trabajo-cta">Ver caso de estudio →</span>
                 </div>
             </div>
-            <div class="trabajo" role="button" tabindex="0" aria-label="Ver proyecto Dulcinea — Landing Page">
+            <div class="trabajo" role="button" tabindex="0" data-case="dulcinea" aria-label="Ver caso de estudio: Dulcinea — Landing Page">
                 <img src="assets/proyecto-landing-dulcinea.webp" alt="Dulcinea — Landing Page de Conversión" loading="lazy" width="800" height="500">
                 <div class="trabajo-overlay"></div>
                 <div class="trabajo-info">
                     <div class="trabajo-cat">Landing Page</div>
                     <h3 class="trabajo-title">Dulcinea — Landing Page</h3>
+                    <p class="trabajo-result">Landing diseñada y prototipada de principio a fin</p>
+                    <span class="trabajo-cta">Ver caso de estudio →</span>
                 </div>
             </div>
         </div>
@@ -730,10 +738,33 @@
         <span class="footer-copy">© 2026 César Mondragón</span>
     </footer>
 
-    <!-- LIGHTBOX -->
-    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Vista de proyecto" aria-hidden="true">
-        <img class="lightbox-img" id="lightboxImg" src="" alt="">
-        <button class="lightbox-close" id="lightboxClose" aria-label="Cerrar">✕</button>
+    <!-- CASO DE ESTUDIO -->
+    <div class="case" id="case" role="dialog" aria-modal="true" aria-labelledby="caseTitle" aria-hidden="true">
+        <div class="case-panel">
+            <button class="case-close" id="caseClose" aria-label="Cerrar caso de estudio">✕</button>
+            <div class="case-media">
+                <img class="case-img" id="caseImg" src="" alt="" width="800" height="500">
+            </div>
+            <div class="case-body">
+                <span class="case-cat" id="caseCat"></span>
+                <h3 class="case-title" id="caseTitle"></h3>
+                <div class="case-badge" id="caseBadge"></div>
+                <div class="case-block">
+                    <span class="case-block-label">El reto</span>
+                    <p class="case-block-text" id="caseProblema"></p>
+                </div>
+                <div class="case-block">
+                    <span class="case-block-label">La solución</span>
+                    <p class="case-block-text" id="caseSolucion"></p>
+                    <ul class="case-list" id="caseSolucionList" hidden></ul>
+                </div>
+                <div class="case-block">
+                    <span class="case-block-label">El resultado</span>
+                    <ul class="case-list case-list-result" id="caseResultado"></ul>
+                </div>
+                <a href="#contacto" class="case-cta-btn" id="caseCta">¿Quieres un resultado así? Hablemos <span aria-hidden="true">→</span></a>
+            </div>
+        </div>
     </div>
 
     <!-- MENÚ MÓVIL -->
@@ -947,44 +978,137 @@
     document.getElementById('cookieAccept').addEventListener('click', () => dismissCookie('all'));
     document.getElementById('cookieReject').addEventListener('click', () => dismissCookie('essential'));
 
-    // ─── LIGHTBOX ─────────────────────────────────────────────────────────────
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightboxImg');
-    const lightboxClose = document.getElementById('lightboxClose');
+    // ─── CASOS DE ESTUDIO ─────────────────────────────────────────────────────
+    // Estructura editable: para actualizar un proyecto, edita su objeto aquí.
+    const cases = {
+        faneti: {
+            cat: 'Branding',
+            title: 'Faneti — Branding e Identidad Visual',
+            img: 'assets/proyecto-branding-faneti.webp',
+            alt: 'Faneti — Proyecto de Branding e Identidad Visual',
+            badge: 'Branding desarrollado de principio a fin',
+            problema: 'La empresa no contaba con una identidad visual sólida ni una presencia coherente que transmitiera confianza y profesionalismo en un sector altamente competitivo.',
+            solucion: 'Diseñé una identidad de marca completa, incluyendo logotipo, sistema visual, paleta de color, tipografía, iconografía, aplicaciones corporativas y propuesta visual para soportes digitales y físicos.',
+            resultado: [
+                'Sistema de identidad consistente para todos los puntos de contacto.',
+                'Manual visual preparado para futuras aplicaciones.',
+                'Marca con una imagen más profesional, moderna y reconocible.'
+            ]
+        },
+        highclass: {
+            cat: 'UX/UI',
+            title: 'Highclass — Diseño UX/UI',
+            img: 'assets/proyecto-uxui-highclass.webp',
+            alt: 'Highclass — Proyecto de Diseño UX/UI',
+            badge: '30+ pantallas diseñadas y prototipadas',
+            problema: 'No existía una experiencia digital que facilitara la conexión entre estudiantes para aprender y compartir conocimientos de forma sencilla.',
+            solucion: 'Diseñé toda la experiencia del usuario, desde la investigación y definición del flujo hasta wireframes, UI, sistema de componentes y prototipo interactivo para una aplicación móvil.',
+            resultado: [
+                'Flujo de onboarding optimizado.',
+                'Diseño responsive basado en componentes reutilizables.',
+                'Prototipo de alta fidelidad listo para validación y desarrollo.'
+            ]
+        },
+        volzari: {
+            cat: 'Shopify',
+            title: 'Volzari — Shopify & E-commerce',
+            img: 'assets/proyecto-shopify-volzari.webp',
+            alt: 'Volzari — Diseño y Optimización de Tienda Shopify',
+            badge: 'Tienda Shopify creada de principio a fin',
+            problema: 'Crear una marca de e-commerce desde cero que ofreciera una experiencia de compra clara, rápida y enfocada en la conversión.',
+            solucion: 'Me encargué de todo el proceso, de principio a fin:',
+            solucionList: [
+                'Branding', 'UX/UI', 'Desarrollo en Shopify', 'Personalización con Liquid',
+                'Diseño responsive', 'Optimización SEO', 'Fichas de producto',
+                'Integración de aplicaciones', 'Configuración completa de la tienda'
+            ],
+            resultado: [
+                'E-commerce completamente funcional.',
+                'Experiencia optimizada para móvil y escritorio.',
+                'Arquitectura preparada para campañas de Meta Ads y TikTok.'
+            ]
+        },
+        dulcinea: {
+            cat: 'Landing Page',
+            title: 'Dulcinea — Landing Page',
+            img: 'assets/proyecto-landing-dulcinea.webp',
+            alt: 'Dulcinea — Landing Page de Conversión',
+            badge: 'Landing diseñada y prototipada de principio a fin',
+            problema: 'Crear una página que transmitiera la esencia artesanal de la marca y guiara al usuario hacia la compra.',
+            solucion: 'Diseñé la arquitectura de información, la identidad visual de la landing, la jerarquía de contenidos, la experiencia responsive y las llamadas a la acción enfocadas en conversión.',
+            resultado: [
+                'Landing orientada a conversión.',
+                'Diseño responsive.',
+                'Sistema visual coherente preparado para desarrollo.'
+            ]
+        }
+    };
 
-    let lightboxTrigger = null;
+    const caseModal = document.getElementById('case');
+    const caseClose = document.getElementById('caseClose');
+    const caseEls = {
+        cat: document.getElementById('caseCat'),
+        title: document.getElementById('caseTitle'),
+        img: document.getElementById('caseImg'),
+        badge: document.getElementById('caseBadge'),
+        problema: document.getElementById('caseProblema'),
+        solucion: document.getElementById('caseSolucion'),
+        solucionList: document.getElementById('caseSolucionList'),
+        resultado: document.getElementById('caseResultado')
+    };
+    let caseTrigger = null;
+
+    function openCase(key) {
+        const c = cases[key];
+        if (!c) return;
+        caseEls.cat.textContent = c.cat;
+        caseEls.title.textContent = c.title;
+        caseEls.img.src = c.img;
+        caseEls.img.alt = c.alt;
+        caseEls.badge.textContent = c.badge;
+        caseEls.problema.textContent = c.problema;
+        caseEls.solucion.textContent = c.solucion;
+        if (c.solucionList && c.solucionList.length) {
+            caseEls.solucionList.innerHTML = c.solucionList.map(i => `<li>${i}</li>`).join('');
+            caseEls.solucionList.hidden = false;
+        } else {
+            caseEls.solucionList.hidden = true;
+        }
+        caseEls.resultado.innerHTML = c.resultado.map(i => `<li>${i}</li>`).join('');
+        caseTrigger = document.activeElement;
+        caseModal.classList.add('open');
+        caseModal.removeAttribute('aria-hidden');
+        document.body.style.overflow = 'hidden';
+        caseModal.querySelector('.case-panel').scrollTop = 0;
+        caseClose.focus();
+    }
+
+    function closeCase() {
+        caseModal.classList.remove('open');
+        caseModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (caseTrigger) { caseTrigger.focus(); caseTrigger = null; }
+    }
 
     document.querySelectorAll('.trabajo').forEach(t => {
-        const openLightbox = () => {
-            const img = t.querySelector('img');
-            lightboxImg.src = img.src;
-            lightboxImg.alt = img.alt;
-            lightbox.classList.add('open');
-            lightbox.removeAttribute('aria-hidden');
-            document.body.style.overflow = 'hidden';
-            lightboxTrigger = t;
-            lightboxClose.focus();
-        };
-        t.addEventListener('click', openLightbox);
+        const open = () => openCase(t.dataset.case);
+        t.addEventListener('click', open);
         t.addEventListener('keydown', e => {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(); }
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
         });
     });
 
-    function closeLightbox() {
-        lightbox.classList.remove('open');
-        lightbox.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-        if (lightboxTrigger) { lightboxTrigger.focus(); lightboxTrigger = null; }
-    }
-
-    lightboxClose.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    caseClose.addEventListener('click', closeCase);
+    caseModal.addEventListener('click', e => { if (e.target === caseModal) closeCase(); });
+    document.getElementById('caseCta').addEventListener('click', closeCase);
     document.addEventListener('keydown', e => {
-        if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
-        if (e.key === 'Tab' && lightbox.classList.contains('open')) {
-            e.preventDefault();
-            lightboxClose.focus();
+        if (!caseModal.classList.contains('open')) return;
+        if (e.key === 'Escape') { closeCase(); return; }
+        if (e.key === 'Tab') {
+            const f = caseModal.querySelectorAll('button, a[href]');
+            const first = f[0], last = f[f.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
         }
     });
 

@@ -220,6 +220,28 @@
         <div class="marquee-track" id="marqueeTrack"></div>
     </div>
 
+    <!-- MÉTRICAS -->
+    <section id="metricas" aria-label="Cifras y trayectoria">
+        <div class="metricas-grid">
+            <div class="metrica reveal">
+                <span class="metrica-num" data-count="20" data-prefix="+">+20</span>
+                <span class="metrica-label">Proyectos entregados</span>
+            </div>
+            <div class="metrica reveal">
+                <span class="metrica-num" data-count="5" data-prefix="+">+5</span>
+                <span class="metrica-label">Años de experiencia</span>
+            </div>
+            <div class="metrica reveal">
+                <span class="metrica-num" data-count="5">5</span>
+                <span class="metrica-label">Países atendidos</span>
+            </div>
+            <div class="metrica reveal">
+                <span class="metrica-num" data-count="100" data-suffix="%">100%</span>
+                <span class="metrica-label">Valoraciones 5★</span>
+            </div>
+        </div>
+    </section>
+
     <!-- SERVICIOS -->
     <section id="servicios">
         <div class="label">Servicios</div>
@@ -816,6 +838,32 @@
     const track = document.getElementById('marqueeTrack');
     const html = items.map(t => `<span class="marquee-item">${t}<span class="marquee-dot">●</span></span>`).join('');
     track.innerHTML = html + html; // duplicate for seamless loop
+
+    // ─── CONTADOR DE MÉTRICAS ─────────────────────────────────────────────────
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const nums = document.querySelectorAll('.metrica-num');
+    if (nums.length && !reduceMotion && 'IntersectionObserver' in window) {
+        const fmt = (el, val) => (el.dataset.prefix || '') + val + (el.dataset.suffix || '');
+        const countObserver = new IntersectionObserver((entries, obs) => {
+            entries.forEach(e => {
+                if (!e.isIntersecting) return;
+                const el = e.target;
+                const target = parseInt(el.dataset.count, 10);
+                const duration = 1200;
+                const start = performance.now();
+                const tick = now => {
+                    const p = Math.min((now - start) / duration, 1);
+                    const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+                    el.textContent = fmt(el, Math.round(target * eased));
+                    if (p < 1) requestAnimationFrame(tick);
+                };
+                el.textContent = fmt(el, 0);
+                requestAnimationFrame(tick);
+                obs.unobserve(el);
+            });
+        }, { threshold: 0.5 });
+        nums.forEach(n => countObserver.observe(n));
+    }
 
     // ─── SCROLL ANIMATIONS ────────────────────────────────────────────────────
     const observer = new IntersectionObserver(entries => {

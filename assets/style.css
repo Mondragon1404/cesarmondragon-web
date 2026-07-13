@@ -9,7 +9,7 @@
             --color-border: #222222;
         }
 
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; color-scheme: dark; }
 
         body {
             font-family: var(--font-body);
@@ -17,7 +17,21 @@
             color: var(--color-white);
             overflow-x: hidden;
             cursor: none;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
+
+        /* ─── FOCUS VISIBLE (accesibilidad de teclado) ─── */
+        :focus-visible {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 3px;
+            border-radius: 2px;
+        }
+        /* Los campos del formulario no usan outline: resaltamos el grupo */
+        .form-input:focus-visible,
+        .form-select:focus-visible,
+        .form-textarea:focus-visible { outline: none; }
+        .form-group:focus-within { border-bottom-color: var(--color-primary); }
 
         /* ─── CURSOR (solo en dispositivos con puntero) ─── */
         @media (hover: none), (pointer: coarse) {
@@ -1141,6 +1155,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.35s;
+            overscroll-behavior: contain;
         }
 
         .mobile-menu.open {
@@ -1233,6 +1248,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.32s ease;
+            overscroll-behavior: contain;
         }
 
         .lightbox.open {

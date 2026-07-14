@@ -1113,27 +1113,26 @@
         }
     });
 
-    // Pan de la imagen siguiendo el cursor (solo puntero fino, sin reduced-motion)
+    // Pan de la imagen siguiendo el cursor (solo puntero fino, sin reduced-motion).
+    // Movemos object-position para recorrer TODO lo que object-fit:cover recorta,
+    // revelando las zonas ocultas en el eje que tenga recorte.
     const caseMedia = caseModal.querySelector('.case-media');
     const canPan = window.matchMedia('(hover: hover) and (pointer: fine)').matches && !reduceMotion;
     if (canPan) {
-        const Z = 1.28;
-        const maxT = (Z - 1) / (2 * Z) * 100; // % de translate que revela justo el borde
         caseMedia.classList.add('is-pannable');
-        caseMedia.addEventListener('mouseenter', () => { caseEls.img.style.transform = `scale(${Z})`; });
         // gain > 1: se alcanza el borde de la imagen antes de que el cursor
         // llegue al borde del contenedor, para poder explorarla entera
-        const gain = 1.7;
-        const clamp = v => Math.max(-0.5, Math.min(0.5, v));
+        const gain = 1.6;
+        const clamp01 = v => Math.max(0, Math.min(1, v));
         caseMedia.addEventListener('mousemove', e => {
             const r = caseMedia.getBoundingClientRect();
             const x = (e.clientX - r.left) / r.width;
             const y = (e.clientY - r.top) / r.height;
-            const tx = clamp((0.5 - x) * gain) * 2 * maxT;
-            const ty = clamp((0.5 - y) * gain) * 2 * maxT;
-            caseEls.img.style.transform = `scale(${Z}) translate(${tx}%, ${ty}%)`;
+            const px = clamp01(0.5 + (x - 0.5) * gain) * 100;
+            const py = clamp01(0.5 + (y - 0.5) * gain) * 100;
+            caseEls.img.style.objectPosition = `${px}% ${py}%`;
         });
-        caseMedia.addEventListener('mouseleave', () => { caseEls.img.style.transform = ''; });
+        caseMedia.addEventListener('mouseleave', () => { caseEls.img.style.objectPosition = ''; });
     }
 
     // ─── FORMULARIO CONTACTO ──────────────────────────────────────────────────

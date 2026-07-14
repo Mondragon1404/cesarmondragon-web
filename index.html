@@ -1122,17 +1122,29 @@
         caseMedia.classList.add('is-pannable');
         // gain > 1: se alcanza el borde de la imagen antes de que el cursor
         // llegue al borde del contenedor, para poder explorarla entera
-        const gain = 1.6;
+        const gain = 1.35;
+        const ease = 0.1; // suavizado del seguimiento (menor = más suave/lento)
         const clamp01 = v => Math.max(0, Math.min(1, v));
+        let tx = 0.5, ty = 0.5;   // objetivo (según cursor)
+        let cx = 0.5, cy = 0.5;   // posición actual (interpolada)
+        let raf = null;
+        const render = () => {
+            cx += (tx - cx) * ease;
+            cy += (ty - cy) * ease;
+            caseEls.img.style.objectPosition = (cx * 100).toFixed(2) + '% ' + (cy * 100).toFixed(2) + '%';
+            if (Math.abs(tx - cx) > 0.0004 || Math.abs(ty - cy) > 0.0004) {
+                raf = requestAnimationFrame(render);
+            } else { raf = null; }
+        };
+        const kick = () => { if (!raf) raf = requestAnimationFrame(render); };
+        caseMedia.addEventListener('mouseenter', () => { cx = tx = 0.5; cy = ty = 0.5; });
         caseMedia.addEventListener('mousemove', e => {
             const r = caseMedia.getBoundingClientRect();
-            const x = (e.clientX - r.left) / r.width;
-            const y = (e.clientY - r.top) / r.height;
-            const px = clamp01(0.5 + (x - 0.5) * gain) * 100;
-            const py = clamp01(0.5 + (y - 0.5) * gain) * 100;
-            caseEls.img.style.objectPosition = `${px}% ${py}%`;
+            tx = clamp01(0.5 + ((e.clientX - r.left) / r.width - 0.5) * gain);
+            ty = clamp01(0.5 + ((e.clientY - r.top) / r.height - 0.5) * gain);
+            kick();
         });
-        caseMedia.addEventListener('mouseleave', () => { caseEls.img.style.objectPosition = ''; });
+        caseMedia.addEventListener('mouseleave', () => { tx = 0.5; ty = 0.5; kick(); });
     }
 
     // ─── FORMULARIO CONTACTO ──────────────────────────────────────────────────

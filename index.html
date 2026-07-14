@@ -1121,12 +1121,16 @@
         const maxT = (Z - 1) / (2 * Z) * 100; // % de translate que revela justo el borde
         caseMedia.classList.add('is-pannable');
         caseMedia.addEventListener('mouseenter', () => { caseEls.img.style.transform = `scale(${Z})`; });
+        // gain > 1: se alcanza el borde de la imagen antes de que el cursor
+        // llegue al borde del contenedor, para poder explorarla entera
+        const gain = 1.7;
+        const clamp = v => Math.max(-0.5, Math.min(0.5, v));
         caseMedia.addEventListener('mousemove', e => {
             const r = caseMedia.getBoundingClientRect();
-            const x = Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1);
-            const y = Math.min(Math.max((e.clientY - r.top) / r.height, 0), 1);
-            const tx = (0.5 - x) * 2 * maxT;
-            const ty = (0.5 - y) * 2 * maxT;
+            const x = (e.clientX - r.left) / r.width;
+            const y = (e.clientY - r.top) / r.height;
+            const tx = clamp((0.5 - x) * gain) * 2 * maxT;
+            const ty = clamp((0.5 - y) * gain) * 2 * maxT;
             caseEls.img.style.transform = `scale(${Z}) translate(${tx}%, ${ty}%)`;
         });
         caseMedia.addEventListener('mouseleave', () => { caseEls.img.style.transform = ''; });

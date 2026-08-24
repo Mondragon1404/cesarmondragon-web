@@ -90,6 +90,13 @@
 > del tema claro en el oscuro. Antes de dar un color por bueno, medirlo **contra el fondo
 > sobre el que se va a pintar**, no contra blanco por defecto.
 
+> **Sobre el fondo claro (probado y descartado, 2026-08-24):** se construyeron dos landings
+> con fondo claro (`/clinicas-dentales` y `/gestorias`) para compararlas en producción contra
+> una oscura. **Decisión: el sitio se queda en oscuro.** El tema claro con alcance
+> (`body.tema-claro`, 35 reglas) se retiró del CSS para no dejar código muerto; está en el
+> historial de git si alguna vez se retoma. Lo que sí quedó de esa prueba es la tabla de
+> arriba: el fallo de contraste solo apareció al medir contra el fondo real.
+
 ### Tipografía
 
 | Familia | Uso | Carga |
@@ -328,6 +335,20 @@ Imágenes del sistema funcionando: conversaciones donde el asistente califica un
 - **Zona de exclusión:** equivalente a la altura de la "C" a cada lado
 - **Fondo negro:** logo en blanco
 - **Fondo blanco:** logo en negro
+
+### Versión en rojo — un tono por fondo
+
+Igual que el resto de la paleta, el logo en rojo tiene **dos variantes según el fondo**:
+
+| Fondo | HEX | Contraste | Archivo |
+|---|---|---|---|
+| Oscuro `#0A0A0A` (web) | `#DC4B4B` | 4.86:1 | `assets/logo-rojo.svg` |
+| Claro / impresión | `#A61C1C` | 7.49:1 sobre blanco | pendiente de exportar |
+
+> El logo está **exento** del mínimo de contraste de WCAG, así que esto no es una obligación
+> legal sino de coherencia: si la web pinta el rojo en `#DC4B4B` y el logo va en `#A61C1C`,
+> se ven dos rojos distintos en la misma pantalla. Sobre blanco pasa al revés — `#DC4B4B`
+> queda lavado y `#A61C1C` es el correcto. **Para papel, folleto y documentos, `#A61C1C`.**
 
 ### Usos incorrectos
 

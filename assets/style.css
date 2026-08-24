@@ -1667,6 +1667,14 @@
             gap: 2px;
             margin-top: 56px;
         }
+        /* La home lista cinco sectores y con repeat(3,1fr) la segunda fila
+           dejaba un hueco muerto. Sobre seis columnas caben tres arriba
+           (span 2) y dos abajo a mitad de ancho (span 3). Va acotado a
+           #para-quien: las landings usan la misma rejilla dentro de
+           #lp-coste y ahi siempre son tres tarjetas. */
+        #para-quien .para-quien-grid { grid-template-columns: repeat(6, 1fr); }
+        #para-quien .para-quien-card { grid-column: span 2; }
+        #para-quien .para-quien-card:nth-last-child(-n+2) { grid-column: span 3; }
         .para-quien-card {
             background: #0d0d0d;
             padding: 40px 32px;
@@ -1716,6 +1724,10 @@
 
         @media (max-width: 900px) {
             .para-quien-grid { grid-template-columns: 1fr; }
+            /* En una sola columna los span de arriba romperian la rejilla */
+            #para-quien .para-quien-grid { grid-template-columns: 1fr; }
+            #para-quien .para-quien-card,
+            #para-quien .para-quien-card:nth-last-child(-n+2) { grid-column: auto; }
         }
 
         /* ─── PROCESO ─── */

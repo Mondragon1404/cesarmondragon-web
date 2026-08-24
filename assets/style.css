@@ -2111,3 +2111,107 @@
             .lp-stats { grid-template-columns: 1fr; }
             .lp-actions { gap: 20px; }
         }
+
+        /* ─── TEMA CLARO (landings por sector) ────────────────────────────────
+           Ensayo del volteo completo: mismo HTML, solo cambian los roles de
+           color. Los alias de tokens.css ya estan calculados sobre blanco, asi
+           que aqui basta con NO sobreescribirlos como hace el :root oscuro.
+           El bloque de datos se queda OSCURO a proposito: en una pagina clara,
+           un bloque oscuro se lee como "aqui estan las pruebas". */
+        body.tema-claro {
+            --color-bg:            var(--color-white);
+            --color-text:          var(--color-black);
+            --color-text-muted:    var(--color-neutral-600);  /* #666 → 5.74:1 sobre blanco */
+            --color-primary:       var(--color-red-600);      /* #A61C1C → 7.49:1 */
+            --color-primary-hover: var(--color-red-800);
+            --color-border:        #E8E6E2;
+            --lp-superficie:       #FAF9F7;                   /* papel calido, menos clinico que el blanco puro */
+            --lp-linea:            #E8E6E2;
+            background: var(--color-white);
+            color: var(--color-black);
+        }
+
+        .tema-claro nav.scrolled {
+            background: rgba(255,255,255,0.92);
+            border-bottom: 1px solid var(--lp-linea);
+        }
+        .tema-claro .hero-heading,
+        .tema-claro .servicios-title,
+        .tema-claro .proceso-title,
+        .tema-claro .cta-title,
+        .tema-claro .lp-stat-title,
+        .tema-claro .para-quien-title,
+        .tema-claro .proceso-step-title { color: var(--color-black); }
+
+        .tema-claro .hero-desc,
+        .tema-claro .lp-quote p { color: var(--color-neutral-600); }
+
+        .tema-claro #lp-hero,
+        .tema-claro #lp-coste,
+        .tema-claro #lp-como,
+        .tema-claro #lp-prueba,
+        .tema-claro #lp-cta { background: var(--color-white); border-top-color: var(--lp-linea); }
+
+        .tema-claro .lp-stat,
+        .tema-claro .para-quien-card {
+            background: var(--lp-superficie);
+            border-color: var(--lp-linea);
+        }
+        .tema-claro .para-quien-card:hover,
+        .tema-claro .lp-stat:hover { border-color: var(--color-primary); }
+
+        .tema-claro .proceso-circle {
+            background: var(--color-white);
+            border-color: var(--lp-linea);
+        }
+        .tema-claro .lp-link-alt { border-bottom-color: var(--lp-linea); }
+        .tema-claro .lp-link-alt:hover { color: var(--color-black); border-color: var(--color-primary); }
+
+        /* Los botones son blancos sobre oscuro; en claro hay que invertirlos */
+        .tema-claro .btn-cta,
+        .tema-claro .btn-nav {
+            background: var(--color-black);
+            color: var(--color-white);
+        }
+        .tema-claro .btn-cta:hover,
+        .tema-claro .btn-nav:hover {
+            background: var(--color-primary);
+            color: var(--color-white);
+        }
+        .tema-claro .skip-link { background: var(--color-black); color: var(--color-white); }
+
+        .tema-claro footer { border-top-color: var(--lp-linea); }
+        .tema-claro .cookie-banner {
+            background: var(--color-white);
+            color: var(--color-black);
+            border-top: 1px solid var(--lp-linea);
+        }
+        .tema-claro .cookie-reject { color: var(--color-neutral-600); }
+
+        /* El bloque de datos se mantiene oscuro dentro de la pagina clara.
+           Dentro de el vuelven a valer los alias del tema oscuro. */
+        .tema-claro #lp-datos {
+            --color-text-muted:  var(--color-neutral-400);
+            --color-primary:     var(--color-red-400);
+            background: var(--color-black);
+            border-top-color: var(--color-black);
+        }
+        .tema-claro #lp-datos .servicios-title,
+        .tema-claro #lp-datos .lp-stat-title { color: var(--color-white); }
+        .tema-claro #lp-datos .lp-stat {
+            background: #0d0d0d;
+            border-color: #1e1e1e;
+        }
+
+        /* Las tarjetas de "Para quien" son enlaces a su landing */
+        a.para-quien-card { display: block; text-decoration: none; color: inherit; }
+        .para-quien-cta {
+            display: block;
+            margin-top: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-primary);
+            letter-spacing: -0.01em;
+            transition: transform 0.25s;
+        }
+        a.para-quien-card:hover .para-quien-cta { transform: translateX(4px); }

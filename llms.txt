@@ -8,11 +8,13 @@ Trabaja con negocios de España y Latinoamérica.
 
 ## Sectores
 
-Ha analizado el proceso de captación de 284 negocios, uno a uno, entrando en sus webs como entraría un cliente suyo. Tres sectores con página propia:
+Ha analizado el proceso de captación de 284 negocios, uno a uno, entrando en sus webs como entraría un cliente suyo. Cinco sectores con página propia:
 
 - **Inmobiliarias y administradores de fincas** (`/inmobiliarias`): de 59 analizadas, 29 captan a mano y 25 no permiten agendar una visita sin llamar por teléfono.
 - **Clínicas dentales y centros de salud** (`/clinicas-dentales`): de 55 analizadas, 26 no dejan pedir cita online.
 - **Gestorías, asesorías y despachos** (`/gestorias`): de 37 analizadas, 23 lo llevan todo a mano.
+- **Estética, belleza y peluquería** (`/estetica`): de 34 analizados, 11 no permiten reservar online y 6 no confirman la cita ni recuperan los huecos cancelados.
+- **Restaurantes, bares y obradores** (`/restauracion`): de 27 analizados, 11 no tienen web propia y 9 no tienen canal de pedidos propio.
 
 También trabaja con tiendas online, marcas personales y proyectos de branding.
 

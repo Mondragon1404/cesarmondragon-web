@@ -1691,6 +1691,15 @@
             line-height: 1.7;
             font-weight: 300;
         }
+        /* La animacion la aporta .reveal, que ademas respeta prefers-reduced-motion */
+        .para-quien-nota {
+            margin-top: 32px;
+            max-width: 620px;
+            font-size: 14px;
+            color: var(--color-text-muted);
+            line-height: 1.7;
+            font-weight: 300;
+        }
 
         @media (max-width: 900px) {
             .para-quien-grid { grid-template-columns: 1fr; }

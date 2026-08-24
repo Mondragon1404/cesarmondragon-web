@@ -645,7 +645,6 @@
                 <label for="website">No rellenar este campo</label>
                 <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
             </div>
-            <input type="hidden" name="ts" id="formTs" value="">
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label" for="nombre">Nombre y apellido<span class="required-mark" aria-hidden="true">*</span></label>
@@ -1156,9 +1155,9 @@
     // ─── FORMULARIO CONTACTO ──────────────────────────────────────────────────
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
-        // Antispam: sella cuando el formulario queda disponible. Un envio instantaneo no es humano.
-        const formTs = document.getElementById('formTs');
-        if (formTs) formTs.value = String(Date.now());
+        // Antispam: se mide cuanto tarda en enviarse, todo dentro del navegador.
+        // No se compara con el reloj del servidor: los relojes de los clientes se desvian.
+        const formListo = Date.now();
         contactForm.addEventListener('submit', async e => {
             e.preventDefault();
             const btn     = document.getElementById('formBtn');
@@ -1182,7 +1181,7 @@
                     servicios:     fd.getAll('servicio[]'),
                     mensaje:       fd.get('mensaje'),
                     website:       fd.get('website'),
-                    ts:            fd.get('ts'),
+                    dt:            Date.now() - formListo,
                 };
                 const res = await fetch('/api/contact', {
                     method: 'POST',
@@ -1192,7 +1191,6 @@
                 if (res.ok) {
                     okMsg.style.display = 'block';
                     contactForm.reset();
-                    if (formTs) formTs.value = String(Date.now()); // reset() lo vacia
                 } else {
                     errMsg.textContent = 'Algo salió mal. Intenta de nuevo.';
                     errMsg.style.display = 'block';

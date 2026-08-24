@@ -97,7 +97,7 @@ const PRESUPUESTOS = [
 ];
 
 // Devuelve el motivo del descarte, o null si el envío parece humano.
-function motivoDeSpam({ website, ts, nombre, empresa, email, tipo_negocio, presupuesto }) {
+function motivoDeSpam({ website, dt, nombre, empresa, email, tipo_negocio, presupuesto }) {
   // 1. Honeypot: campo invisible para personas, irresistible para bots que rellenan todo.
   if (typeof website === 'string' && website.trim()) return 'honeypot relleno';
 
@@ -110,12 +110,13 @@ function motivoDeSpam({ website, ts, nombre, empresa, email, tipo_negocio, presu
   if (!empresa || !String(empresa).trim()) return 'sin empresa';
   if (!email || !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(String(email).trim())) return 'email malformado';
 
-  // 4. Tiempo de relleno. Si falta `ts` no bloqueamos: puede ser una página cacheada
-  //    de antes de este cambio. Si viene y es instantáneo, no lo ha escrito una persona.
-  const inicio = Number(ts);
-  if (Number.isFinite(inicio) && inicio > 0) {
-    const segundos = (Date.now() - inicio) / 1000;
-    if (segundos < 3) return `formulario enviado en ${segundos.toFixed(1)}s`;
+  // 4. Tiempo de relleno. `dt` son los milisegundos que el formulario estuvo abierto,
+  //    medidos enteros en el navegador. NO comparar contra el reloj del servidor: los
+  //    relojes de los clientes se desvian (el de César iba 93s adelantado) y eso
+  //    bloqueaba leads reales. Si falta `dt` no bloqueamos: pagina cacheada.
+  const ms = Number(dt);
+  if (Number.isFinite(ms) && ms > 0 && ms < 3000) {
+    return `formulario enviado en ${(ms / 1000).toFixed(1)}s`;
   }
 
   return null;
@@ -137,12 +138,12 @@ module.exports = async function handler(req, res) {
     servicios,
     mensaje,
     website,
-    ts,
+    dt,
   } = req.body;
 
   // Se descarta antes de tocar n8n, Airtable o Resend: el spam no debe generar
   // ni registro ni correo de confirmación a una dirección inventada.
-  const spam = motivoDeSpam({ website, ts, nombre, empresa, email, tipo_negocio, presupuesto });
+  const spam = motivoDeSpam({ website, dt, nombre, empresa, email, tipo_negocio, presupuesto });
   if (spam) {
     console.warn('SPAM_BLOCKED', JSON.stringify({ motivo: spam, nombre, email }));
     // 200 a propósito: si le devolvemos un error, el bot reintenta o se adapta.

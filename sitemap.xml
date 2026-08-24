@@ -32,4 +32,10 @@
             <image:caption>Landing page optimizada para conversión diseñada para Dulcinea.</image:caption>
         </image:image>
     </url>
+    <url>
+        <loc>https://cesarmondragon.com/inmobiliarias</loc>
+        <lastmod>2026-08-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
 </urlset>

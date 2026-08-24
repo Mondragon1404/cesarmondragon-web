@@ -85,11 +85,12 @@ async function sendEmail({ from, to, subject, html }) {
 // Valores que el <select> del formulario puede producir. Un navegador nunca puede
 // enviar otra cosa: la opción placeholder es `disabled` y el campo es `required`.
 const TIPOS_NEGOCIO = [
-  'Ecommerce', 'Marca Personal', 'Clínica Estética', 'Clínica Dental', 'Inmobiliaria',
-  'Restaurante / Cafetería', 'Agencia', 'Startup', 'SaaS', 'Coach / Mentor',
-  'Academia / Formación', 'Negocio Local', 'Empresa de Servicios', 'Tienda Física',
-  'Estudio Creativo', 'Consultoría', 'Arquitectura / Interiorismo', 'Fitness / Gym',
-  'Belleza / Cosmética', 'Otro',
+  'Tienda online',
+  'Negocio local con clientes presenciales',
+  'Servicios profesionales / B2B',
+  'Marca personal o creador de contenido',
+  'Startup o producto digital',
+  'Otro',
 ];
 
 const PRESUPUESTOS = [

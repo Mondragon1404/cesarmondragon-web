@@ -640,6 +640,12 @@
         <!-- Formulario: ve a formspree.io, crea una cuenta gratis con tu email y reemplaza YOUR_FORM_ID por tu ID -->
         <form class="contact-form reveal" id="contactForm" action="/api/contact" method="POST">
             <input type="hidden" name="_subject" value="Nuevo contacto — César Mondragón">
+            <!-- Antispam: invisible para personas. Si llega relleno, es un bot. No tocar. -->
+            <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;">
+                <label for="website">No rellenar este campo</label>
+                <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+            <input type="hidden" name="ts" id="formTs" value="">
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label" for="nombre">Nombre y apellido<span class="required-mark" aria-hidden="true">*</span></label>
@@ -1150,6 +1156,9 @@
     // ─── FORMULARIO CONTACTO ──────────────────────────────────────────────────
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
+        // Antispam: sella cuando el formulario queda disponible. Un envio instantaneo no es humano.
+        const formTs = document.getElementById('formTs');
+        if (formTs) formTs.value = String(Date.now());
         contactForm.addEventListener('submit', async e => {
             e.preventDefault();
             const btn     = document.getElementById('formBtn');
@@ -1172,6 +1181,8 @@
                     presupuesto:   fd.get('presupuesto'),
                     servicios:     fd.getAll('servicio[]'),
                     mensaje:       fd.get('mensaje'),
+                    website:       fd.get('website'),
+                    ts:            fd.get('ts'),
                 };
                 const res = await fetch('/api/contact', {
                     method: 'POST',
@@ -1181,6 +1192,7 @@
                 if (res.ok) {
                     okMsg.style.display = 'block';
                     contactForm.reset();
+                    if (formTs) formTs.value = String(Date.now()); // reset() lo vacia
                 } else {
                     errMsg.textContent = 'Algo salió mal. Intenta de nuevo.';
                     errMsg.style.display = 'block';

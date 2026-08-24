@@ -1,33 +1,46 @@
-# César Mondragón — Diseñador Freelance Barcelona
+# César Mondragón — Sistemas de captación automatizada
 
-> Diseñador freelance en Barcelona especializado en branding, UX/UI, Shopify y automatización con IA. Creador del Sistema AIMA™.
+> Diseña y automatiza el sistema que responde, califica y agenda por ti: web, asistentes con IA y CRM. Creador del Sistema AIMA™.
 
-César Mondragón es diseñador freelance con base en Barcelona. Combina diseño estratégico, experiencia de usuario e inteligencia artificial para ayudar a marcas y negocios a crecer. Es el creador del Sistema AIMA™, un método propio que integra identidad visual, diseño web y automatización en un único flujo de trabajo.
+César Mondragón monta sistemas de captación para negocios que hoy captan a mano — teléfono, WhatsApp y hoja de cálculo. Combina diseño, automatización e inteligencia artificial para que la primera respuesta, el filtrado y la reserva de cita ocurran sin intervención manual. Es el creador del Sistema AIMA™, un método propio que integra identidad visual, diseño web y automatización en un único flujo de trabajo.
+
+Trabaja con negocios de España y Latinoamérica.
+
+## Sectores
+
+Ha analizado el proceso de captación de 284 negocios, uno a uno, entrando en sus webs como entraría un cliente suyo. Tres sectores con página propia:
+
+- **Inmobiliarias y administradores de fincas** (`/inmobiliarias`): de 59 analizadas, 29 captan a mano y 25 no permiten agendar una visita sin llamar por teléfono.
+- **Clínicas dentales y centros de salud** (`/clinicas-dentales`): de 55 analizadas, 26 no dejan pedir cita online.
+- **Gestorías, asesorías y despachos** (`/gestorias`): de 37 analizadas, 23 lo llevan todo a mano.
+
+También trabaja con tiendas online, marcas personales y proyectos de branding.
 
 ## Servicios
 
-- **Branding & Identidad Visual**: Desarrollo de marca desde cero — naming, logotipo, paleta, tipografía, sistema visual completo.
-- **UX/UI & Diseño Web**: Diseño de interfaces y experiencias digitales centradas en conversión. Webs en Webflow, WordPress y Shopify.
-- **Shopify**: Diseño y optimización de tiendas Shopify para aumentar conversión y reducir fricción en el proceso de compra.
-- **Automatización con IA**: Sistemas de automatización conectados a WhatsApp, email y CRM. Flujos que trabajan sin intervención manual.
-- **Sistema AIMA™**: Metodología propia que combina los cuatro servicios anteriores en un sistema integrado para negocios que quieren escalar.
+- **Sistema AIMA™**: método propio que integra los servicios de abajo en un sistema de captación completo — responde, califica, agenda y hace seguimiento.
+- **Automatización con IA**: asistentes conectados a WhatsApp, email, calendario y CRM. Flujos que trabajan sin intervención manual.
+- **UX/UI y diseño web**: interfaces y experiencias centradas en conversión. Webflow, WordPress y Shopify.
+- **Branding e identidad visual**: marca desde cero — naming, logotipo, paleta, tipografía, sistema visual completo.
+- **Shopify**: diseño y optimización de tiendas para aumentar conversión y reducir fricción en el proceso de compra.
 
 ## Proyectos destacados
 
-- **Faneti**: Branding e identidad visual estratégica.
-- **Highclass**: Diseño UX/UI completo.
-- **Volzari**: Diseño y optimización de tienda Shopify.
-- **Dulcinea**: Landing page optimizada para conversión.
+- **Faneti**: branding e identidad visual estratégica.
+- **Highclass**: diseño UX/UI completo.
+- **Volzari**: diseño y optimización de tienda Shopify.
+- **Dulcinea**: landing page optimizada para conversión.
 
 ## Credenciales
 
-- Grado en Diseño — Universitat Politècnica de Catalunya (UPC)
+- Grado en Diseño Profesional Gráfico — Universidad Peruana de Ciencias Aplicadas
 - Máster en UX/UI — Barcelona, 2023
-- +5 años de experiencia en diseño freelance
-- LinkedIn: https://www.linkedin.com/in/cesarmondragon
+- Especializaciones en Dirección de Arte, Branding y Marketing Digital
+- +5 años diseñando marcas y sistemas digitales en España y Latinoamérica
 
 ## Contacto
 
 - Web: https://cesarmondragon.com
-- Email: disponible en https://cesarmondragon.com/#contacto
-- Ubicación: Barcelona, España
+- Reserva de llamada: https://cal.com/cesar-mondragon/30min
+- Email: cesar@cesarmondragon.com
+- LinkedIn: https://www.linkedin.com/in/cesar-mondragon/

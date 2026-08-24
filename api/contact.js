@@ -94,22 +94,26 @@ const TIPOS_NEGOCIO = [
 ];
 
 const PRESUPUESTOS = [
+  // 'Menos de 500 EUR' ya no se ofrece en el formulario, pero se acepta: una
+  // pagina cacheada todavia puede enviarlo y no debe descartarse como spam.
   'Menos de 500 EUR', '500-1500 EUR', '1500-3000 EUR', '3000-7000 EUR', '7000+ EUR',
 ];
 
 // Devuelve el motivo del descarte, o null si el envío parece humano.
-function motivoDeSpam({ website, dt, nombre, empresa, email, tipo_negocio, presupuesto }) {
+function motivoDeSpam({ website, dt, nombre, email, mensaje, tipo_negocio, presupuesto }) {
   // 1. Honeypot: campo invisible para personas, irresistible para bots que rellenan todo.
   if (typeof website === 'string' && website.trim()) return 'honeypot relleno';
 
   // 2. Desplegables: el bot copia el texto del placeholder o se los inventa.
-  if (!TIPOS_NEGOCIO.includes(tipo_negocio)) return `tipo_negocio invalido (${tipo_negocio})`;
-  if (!PRESUPUESTOS.includes(presupuesto)) return `presupuesto invalido (${presupuesto})`;
+  //    Son OPCIONALES, asi que vacio es valido. Solo se rechaza un valor que
+  //    exista pero no salga del <select>: eso no lo puede producir un navegador.
+  if (tipo_negocio && !TIPOS_NEGOCIO.includes(tipo_negocio)) return `tipo_negocio invalido (${tipo_negocio})`;
+  if (presupuesto && !PRESUPUESTOS.includes(presupuesto)) return `presupuesto invalido (${presupuesto})`;
 
-  // 3. Obligatorios reales.
+  // 3. Obligatorios reales: los tres unicos que pide el formulario.
   if (!nombre || !String(nombre).trim()) return 'sin nombre';
-  if (!empresa || !String(empresa).trim()) return 'sin empresa';
   if (!email || !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(String(email).trim())) return 'email malformado';
+  if (!mensaje || !String(mensaje).trim()) return 'sin mensaje';
 
   // 4. Tiempo de relleno. `dt` son los milisegundos que el formulario estuvo abierto,
   //    medidos enteros en el navegador. NO comparar contra el reloj del servidor: los
@@ -144,7 +148,7 @@ module.exports = async function handler(req, res) {
 
   // Se descarta antes de tocar n8n, Airtable o Resend: el spam no debe generar
   // ni registro ni correo de confirmación a una dirección inventada.
-  const spam = motivoDeSpam({ website, dt, nombre, empresa, email, tipo_negocio, presupuesto });
+  const spam = motivoDeSpam({ website, dt, nombre, email, mensaje, tipo_negocio, presupuesto });
   if (spam) {
     console.warn('SPAM_BLOCKED', JSON.stringify({ motivo: spam, nombre, email }));
     // 200 a propósito: si le devolvemos un error, el bot reintenta o se adapta.

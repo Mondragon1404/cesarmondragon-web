@@ -10,8 +10,11 @@
   /* Brand */
   --color-black:      #0A0A0A;
   --color-white:      #FFFFFF;
-  --color-red-600:    #A61C1C;   /* primario */
-  --color-red-800:    #8B1717;   /* hover / énfasis */
+  --color-red-300:    #E45858;   /* hover en oscuro — 5.50:1 sobre #0A0A0A */
+  --color-red-400:    #DC4B4B;   /* primario en oscuro — 4.86:1, pasa AA a cualquier tamaño */
+  --color-red-500:    #D13A3A;   /* 4.13:1 — solo texto grande, no usar en microcopy */
+  --color-red-600:    #A61C1C;   /* primario en claro e impresión — 7.49:1 sobre blanco */
+  --color-red-800:    #8B1717;   /* hover / énfasis en claro */
   --color-red-100:    #FEE2E2;   /* fondos suaves */
 
   /* Neutrales */

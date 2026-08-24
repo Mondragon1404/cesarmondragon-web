@@ -68,15 +68,27 @@
 
 | Token | HEX | Uso |
 |---|---|---|
-| `--color-red-600` | `#A61C1C` | Acento primario, énfasis, CTA |
-| `--color-red-800` | `#8B1717` | Hover, estados activos |
-| `--color-black` | `#0A0A0A` | Texto principal, fondos oscuros |
-| `--color-neutral-600` | `#666666` | Texto secundario (WCAG AA ✓ 5.5:1) |
-| `--color-neutral-100` | `#E5E5E5` | Bordes, divisores |
-| `--color-neutral-50` | `#F5F5F5` | Fondos alternativos |
-| `--color-white` | `#FFFFFF` | Fondo base |
+| Token | HEX | Uso | Sobre blanco | Sobre `#0A0A0A` |
+|---|---|---|---|---|
+| `--color-red-600` | `#A61C1C` | Primario en **claro** e impresión | 7.49:1 ✓ | 2.64:1 ✗ |
+| `--color-red-500` | `#D13A3A` | Primario en **oscuro** | 4.80:1 ✓ | 4.13:1 ✓ |
+| `--color-red-400` | `#DC4B4B` | Hover en oscuro | 4.08:1 ✓ | 4.86:1 ✓ |
+| `--color-red-800` | `#8B1717` | Hover en claro | — | ✗ |
+| `--color-black` | `#0A0A0A` | Texto en claro, fondo en oscuro | — | — |
+| `--color-neutral-600` | `#666666` | Texto secundario en **claro** | 5.74:1 ✓ | 3.45:1 ✗ |
+| `--color-neutral-400` | `#999999` | Texto secundario en **oscuro** | 2.85:1 ✗ | 6.95:1 ✓ |
+| `--color-neutral-100` | `#E5E5E5` | Bordes y divisores | — | — |
+| `--color-white` | `#FFFFFF` | Fondo en claro, texto en oscuro | — | 19.8:1 ✓ |
 
-> **Regla de contraste:** nunca usar un gris más claro que `#666666` sobre fondo blanco para texto de cuerpo. `#999999` solo para labels decorativos no esenciales.
+> ⚠️ **El contraste depende del fondo, y este sitio es oscuro.**
+> La versión anterior de esta tabla daba `#666666` por válido con "5.5:1", pero esa cifra
+> está medida **sobre blanco**. Sobre el `#0A0A0A` real del sitio da **3.45:1 y no llega
+> al mínimo AA**, y ese color lo usaban todos los párrafos. Lo mismo con el rojo `#A61C1C`:
+> 2,64:1 en titulares.
+>
+> **Regla:** cada color de texto tiene dos variantes, una por fondo. Nunca reutilizar la
+> del tema claro en el oscuro. Antes de dar un color por bueno, medirlo **contra el fondo
+> sobre el que se va a pintar**, no contra blanco por defecto.
 
 ### Tipografía
 
@@ -88,7 +100,15 @@
 **Regla:** Máximo 2 familias. Nunca mezclar una tercera sin justificación.
 
 **Pesos de display (Fraunces):** 700, 900 — opsz automático según tamaño
-**Pesos de cuerpo (Inter):** 300 (texto largo), 400 (base), 500 (énfasis suave), 600 (semibold), 700 (bold)
+**Pesos de cuerpo (Inter):** **400 (base y párrafos)**, 500 (énfasis suave), 600 (semibold), 700 (bold). El **300 solo por encima de 20px** — nunca en párrafos.
+
+> ⚠️ **El 300 no es para "texto largo".** La regla anterior decía justo lo contrario y llevó a
+> tener párrafos a 14px con peso 300 en gris sobre negro. En pantalla, un peso fino resta
+> grosor al trazo y se suma a cualquier déficit de contraste: son dos problemas que se
+> multiplican. El comprador de estos servicios ronda los 45-60 años.
+>
+> **Mínimos para párrafos:** 15px en tarjetas de rejilla, 16px en texto de ancho completo,
+> peso 400, interlineado 1.7. Por debajo de eso no se publica.
 
 ### Escala tipográfica (ratio 1.25 — Major Third)
 
@@ -273,7 +293,15 @@ Foto de César como diseñador. Transmite autoridad técnica, no corporativismo.
 
 #### Tipo C — Proceso y behind the scenes
 
-Imágenes de trabajo en progreso: flujos de automatización, wireframes, sistemas de diseño. Úselas para contenido de redes o artículos.
+Imágenes del sistema funcionando: conversaciones donde el asistente califica un lead, un calendario llenándose, una vista del CRM, un flujo de n8n.
+
+> **Este tipo sube de categoría (2026-08).** Estaba reservado a redes y artículos, pero es
+> la imagen que más convence al comprador de servicios locales — inmobiliaria, clínica,
+> gestoría. A esa persona un mockup de branding no le dice nada: quiere ver **la cosa
+> funcionando**, no la cosa diseñada. En las landings por sector es la imagen principal,
+> por delante del mockup.
+>
+> Tapar datos antes de capturar, nunca con overlay encima.
 
 **Reglas:**
 - Capturas de pantalla de herramientas reales (Figma, n8n, Notion, etc.) — sin mockear.
@@ -313,7 +341,7 @@ Imágenes de trabajo en progreso: flujos de automatización, wireframes, sistema
 ## 6. Checklist de aplicación
 
 - [x] Statement de posicionamiento definido
-- [x] Paleta con contraste WCAG AA verificado
+- [x] Paleta con contraste WCAG AA verificado **en los dos fondos** (claro y `#0A0A0A`)
 - [x] 2 familias tipográficas con licencia clara (Google Fonts — SIL Open Font)
 - [x] Tokens CSS exportables (`brand/tokens.css`)
 - [x] Brandbook en Markdown, versionable en Git
@@ -321,7 +349,8 @@ Imágenes de trabajo en progreso: flujos de automatización, wireframes, sistema
 - [x] Escala de espaciado documentada con uso semántico
 - [x] Colores de estado y alias semánticos documentados
 - [x] Border radius, sombras, motion y z-index documentados
-- [x] Dark mode documentado
+- [x] Dark mode documentado, con sus propios alias de color
+- [ ] Capturas reales del sistema (Tipo C) en las landings por sector — pendiente de material
 - [ ] Ejemplos visuales correcto/incorrecto (pendiente diseño)
 - [ ] Adoptar Lucide como familia de iconos en v2.0
 - [x] Definir paleta de fotografía con ejemplos reales de proyectos (Tipo A/B/C)

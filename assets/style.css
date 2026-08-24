@@ -7,6 +7,18 @@
             --color-bg:     var(--color-black);
             --color-text:   var(--color-white);
             --color-border: #222222;
+
+            /* Los alias de tokens.css están calculados sobre fondo blanco. Sobre el
+               #0A0A0A real del sitio no llegan al mínimo de contraste, así que el
+               tema oscuro necesita los suyos:
+                 #666666 →  3.45:1  falla AA   |  #999999 → 6.95:1  pasa
+                 #A61C1C →  2.64:1  falla      |  #DC4B4B → 4.86:1  pasa
+               Se usa el 400 y no el 500 (#D13A3A, 4.13:1) porque el rojo aparece en
+               microcopy de 10-12px: números de paso, categorías y el asterisco de campo
+               obligatorio. El 500 solo llegaría para texto grande. */
+            --color-text-muted:    var(--color-neutral-400);
+            --color-primary:       var(--color-red-400);
+            --color-primary-hover: var(--color-red-300);
         }
 
         html { scroll-behavior: smooth; color-scheme: dark; }
@@ -258,10 +270,10 @@
         .hero-heading .accent { color: var(--color-primary); }
 
         .hero-desc {
-            font-size: clamp(14px, 1.25vw, 17px);
+            font-size: clamp(16px, 1.3vw, 18px);
             color: var(--color-neutral-400);
-            font-weight: 300;
-            line-height: 1.75;
+            font-weight: 400;
+            line-height: 1.7;
             max-width: 500px;
             margin-bottom: 40px;
             opacity: 0;
@@ -479,11 +491,12 @@
         }
 
         .servicios-subtitle {
-            font-size: 15px;
+            font-size: 16px;
             color: var(--color-neutral-400);
-            font-weight: 300;
+            font-weight: 400;
             margin-bottom: 64px;
             max-width: 520px;
+            line-height: 1.7;
         }
 
         .servicios-grid {
@@ -531,17 +544,17 @@
         .servicio-card:hover .servicio-card-title { color: var(--color-primary); }
 
         .servicio-card-desc {
-            font-size: 13px;
+            font-size: 15px;
             color: var(--color-neutral-400);
-            line-height: 1.65;
-            font-weight: 300;
+            line-height: 1.7;
+            font-weight: 400;
             flex: 1;
             margin-bottom: 18px;
         }
 
         .servicio-card-price {
             font-size: 12px;
-            font-weight: 300;
+            font-weight: 400;
             color: var(--color-neutral-400);
             letter-spacing: 0.04em;
             margin-bottom: 18px;
@@ -609,8 +622,8 @@
         .aima-desc {
             font-size: 16px;
             color: var(--color-neutral-400);
-            line-height: 1.75;
-            font-weight: 300;
+            line-height: 1.7;
+            font-weight: 400;
             margin-bottom: 32px;
             max-width: 440px;
         }
@@ -623,9 +636,9 @@
         }
 
         .aima-feature {
-            font-size: 14px;
+            font-size: 15px;
             color: var(--color-neutral-400);
-            font-weight: 300;
+            font-weight: 400;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -717,10 +730,10 @@
         }
 
         .aima-flow-step-desc {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--color-text-muted);
-            font-weight: 300;
-            line-height: 1.5;
+            font-weight: 400;
+            line-height: 1.6;
         }
 
         .aima-flow-connector {
@@ -900,10 +913,10 @@
 
         .acerca-text {
             font-size: 16px;
-            line-height: 1.75;
+            line-height: 1.7;
             color: var(--color-neutral-400);
             margin-bottom: 36px;
-            font-weight: 300;
+            font-weight: 400;
         }
 
         .tags {
@@ -1035,7 +1048,6 @@
         .form-textarea {
             resize: none;
             min-height: 80px;
-            line-height: 1.7;
         }
 
         .form-checkboxes {
@@ -1279,7 +1291,7 @@
         .cookie-text {
             font-size: 13px;
             color: #aaa;
-            font-weight: 300;
+            font-weight: 400;
             flex: 1;
             min-width: 200px;
         }
@@ -1431,9 +1443,9 @@
         }
 
         .case-block-text {
-            font-size: 14px;
-            line-height: 1.65;
-            font-weight: 300;
+            font-size: 16px;
+            line-height: 1.7;
+            font-weight: 400;
             color: var(--color-neutral-400);
         }
 
@@ -1446,9 +1458,9 @@
         .case-list li {
             position: relative;
             padding-left: 20px;
-            font-size: 14px;
-            line-height: 1.55;
-            font-weight: 300;
+            font-size: 15px;
+            line-height: 1.6;
+            font-weight: 400;
             color: var(--color-neutral-400);
             margin-bottom: 7px;
         }
@@ -1547,7 +1559,8 @@
             .hero-photo-col { height: 85vw; max-height: 520px; overflow: hidden; }
             .hero-photo-wrap, .hero-photo-parallax { height: 100%; }
             .hero-photo { width: 100%; height: 100%; max-height: none; object-fit: cover; object-position: center 12%; }
-            .hero-desc { max-width: 100%; }
+            .hero-desc { max-width: 100%;
+        }
             .hero-actions { flex-direction: row; flex-wrap: nowrap; }
             .btn-hero-primary, .btn-hero-secondary { flex: 1; justify-content: center; font-size: 13px; padding: 13px 16px; }
             section { padding: 80px 24px; }
@@ -1634,10 +1647,10 @@
             padding-top: 28px;
         }
         .acerca-bio p {
-            font-size: 15px;
-            line-height: 1.8;
+            font-size: 16px;
+            line-height: 1.75;
             color: var(--color-neutral-400);
-            font-weight: 300;
+            font-weight: 400;
             margin-bottom: 18px;
         }
         .acerca-bio p:last-child { margin-bottom: 0; }
@@ -1686,19 +1699,19 @@
             margin-bottom: 14px;
         }
         .para-quien-desc {
-            font-size: 14px;
+            font-size: 15px;
             color: var(--color-text-muted);
             line-height: 1.7;
-            font-weight: 300;
+            font-weight: 400;
         }
         /* La animacion la aporta .reveal, que ademas respeta prefers-reduced-motion */
         .para-quien-nota {
             margin-top: 32px;
             max-width: 620px;
-            font-size: 14px;
+            font-size: 15px;
             color: var(--color-text-muted);
             line-height: 1.7;
-            font-weight: 300;
+            font-weight: 400;
         }
 
         @media (max-width: 900px) {
@@ -1793,10 +1806,10 @@
         .proceso-step:hover .proceso-step-title { color: var(--color-primary); }
 
         .proceso-step-desc {
-            font-size: 14px;
+            font-size: 15px;
             color: var(--color-text-muted);
             line-height: 1.7;
-            font-weight: 300;
+            font-weight: 400;
             max-width: 220px;
         }
 
@@ -1812,7 +1825,8 @@
         @media (max-width: 480px) {
             .proceso-steps { grid-template-columns: 1fr; gap: 36px; }
             .proceso-step { align-items: flex-start; text-align: left; }
-            .proceso-step-desc { max-width: none; }
+            .proceso-step-desc { max-width: none;
+        }
         }
 
         /* ─── FAQ ─── */
@@ -1880,10 +1894,10 @@
             overflow: hidden;
             transition: max-height 0.42s cubic-bezier(0.4,0,0.2,1), padding 0.3s;
             padding: 0 0 0 80px;
-            font-size: 14px;
+            font-size: 16px;
             color: var(--color-text-muted);
-            line-height: 1.75;
-            font-weight: 300;
+            line-height: 1.7;
+            font-weight: 400;
         }
         .faq-item.open .faq-a {
             max-height: 260px;
@@ -1892,7 +1906,8 @@
 
         @media (max-width: 480px) {
             .faq-q { grid-template-columns: 36px 1fr 24px; gap: 16px; }
-            .faq-a { padding: 0 0 0 52px; }
+            .faq-a { padding: 0 0 0 52px;
+        }
             .faq-item.open .faq-a { padding: 0 16px 20px 52px; }
         }
 
@@ -1950,7 +1965,7 @@
         .testimonio-card{background:#0d0d0d;border:1px solid #1e1e1e;padding:36px 32px 32px;display:flex;flex-direction:column;gap:28px;transition:border-color .25s;}
         .testimonio-card:hover{border-color:rgba(166,28,28,.35);}
         .testimonio-card::before{content:open-quote;font-family:var(--font-display);font-size:64px;line-height:.6;color:var(--color-primary);opacity:.5;display:block;}
-        .testimonio-text{font-size:15px;color:var(--color-neutral-400);line-height:1.75;font-weight:300;font-style:italic;flex:1;}
+        .testimonio-text{font-size: 15px;color:var(--color-neutral-400);line-height: 1.75;font-weight: 400;font-style:italic;flex:1;}
         .testimonio-author{display:flex;flex-direction:column;gap:4px;border-top:1px solid #1e1e1e;padding-top:20px;}
         .testimonio-name{font-size:14px;font-weight:700;color:var(--color-white);letter-spacing:-.01em;}
         .testimonio-role{font-size:12px;color:var(--color-text-muted);font-weight:400;letter-spacing:.02em;}
@@ -2007,10 +2022,10 @@
         .lp-intro {
             max-width: 62ch;
             margin-top: 24px;
-            font-size: 15px;
+            font-size: 16px;
             color: var(--color-text-muted);
-            line-height: 1.75;
-            font-weight: 300;
+            line-height: 1.7;
+            font-weight: 400;
         }
 
         /* Bloque de datos: el argumento de autoridad */
@@ -2052,10 +2067,10 @@
             margin-bottom: 12px;
         }
         .lp-stat-desc {
-            font-size: 14px;
+            font-size: 15px;
             color: var(--color-text-muted);
             line-height: 1.7;
-            font-weight: 300;
+            font-weight: 400;
         }
 
         #lp-coste { background: var(--color-black); border-top: 1px solid #1a1a1a; }
@@ -2071,7 +2086,7 @@
         .lp-quote p {
             font-size: 17px;
             line-height: 1.75;
-            font-weight: 300;
+            font-weight: 400;
             font-style: italic;
             color: var(--color-neutral-400);
         }

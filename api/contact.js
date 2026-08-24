@@ -82,6 +82,45 @@ async function sendEmail({ from, to, subject, html }) {
   return { ok: res.ok, status: res.status, data };
 }
 
+// Valores que el <select> del formulario puede producir. Un navegador nunca puede
+// enviar otra cosa: la opción placeholder es `disabled` y el campo es `required`.
+const TIPOS_NEGOCIO = [
+  'Ecommerce', 'Marca Personal', 'Clínica Estética', 'Clínica Dental', 'Inmobiliaria',
+  'Restaurante / Cafetería', 'Agencia', 'Startup', 'SaaS', 'Coach / Mentor',
+  'Academia / Formación', 'Negocio Local', 'Empresa de Servicios', 'Tienda Física',
+  'Estudio Creativo', 'Consultoría', 'Arquitectura / Interiorismo', 'Fitness / Gym',
+  'Belleza / Cosmética', 'Otro',
+];
+
+const PRESUPUESTOS = [
+  'Menos de 500 EUR', '500-1500 EUR', '1500-3000 EUR', '3000-7000 EUR', '7000+ EUR',
+];
+
+// Devuelve el motivo del descarte, o null si el envío parece humano.
+function motivoDeSpam({ website, ts, nombre, empresa, email, tipo_negocio, presupuesto }) {
+  // 1. Honeypot: campo invisible para personas, irresistible para bots que rellenan todo.
+  if (typeof website === 'string' && website.trim()) return 'honeypot relleno';
+
+  // 2. Desplegables: el bot copia el texto del placeholder o se los inventa.
+  if (!TIPOS_NEGOCIO.includes(tipo_negocio)) return `tipo_negocio invalido (${tipo_negocio})`;
+  if (!PRESUPUESTOS.includes(presupuesto)) return `presupuesto invalido (${presupuesto})`;
+
+  // 3. Obligatorios reales.
+  if (!nombre || !String(nombre).trim()) return 'sin nombre';
+  if (!empresa || !String(empresa).trim()) return 'sin empresa';
+  if (!email || !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(String(email).trim())) return 'email malformado';
+
+  // 4. Tiempo de relleno. Si falta `ts` no bloqueamos: puede ser una página cacheada
+  //    de antes de este cambio. Si viene y es instantáneo, no lo ha escrito una persona.
+  const inicio = Number(ts);
+  if (Number.isFinite(inicio) && inicio > 0) {
+    const segundos = (Date.now() - inicio) / 1000;
+    if (segundos < 3) return `formulario enviado en ${segundos.toFixed(1)}s`;
+  }
+
+  return null;
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -97,7 +136,18 @@ module.exports = async function handler(req, res) {
     presupuesto,
     servicios,
     mensaje,
+    website,
+    ts,
   } = req.body;
+
+  // Se descarta antes de tocar n8n, Airtable o Resend: el spam no debe generar
+  // ni registro ni correo de confirmación a una dirección inventada.
+  const spam = motivoDeSpam({ website, ts, nombre, empresa, email, tipo_negocio, presupuesto });
+  if (spam) {
+    console.warn('SPAM_BLOCKED', JSON.stringify({ motivo: spam, nombre, email }));
+    // 200 a propósito: si le devolvemos un error, el bot reintenta o se adapta.
+    return res.status(200).json({ ok: true });
+  }
 
   try {
     const n8nRes = await fetch(

@@ -79,6 +79,20 @@ async function sendEmail({ from, to, subject, html }) {
     body: JSON.stringify({ from, to, subject, html }),
   });
   const data = await res.json().catch(() => ({}));
+
+  // Resend NO lanza excepcion cuando rechaza un envio: devuelve 4xx/5xx con un
+  // cuerpo JSON. Quien llama a esta funcion ignoraba el valor devuelto, asi que
+  // una clave invalida, un dominio sin verificar o un destinatario bloqueado
+  // fallaban EN SILENCIO: ni excepcion, ni log, ni aviso. El try/catch de fuera
+  // solo salta si se cae la red, que casi nunca es el caso real.
+  if (!res.ok) {
+    console.error('RESEND_FAILED', JSON.stringify({
+      status: res.status,
+      to,
+      from,
+      error: (data && (data.message || data.name)) || data,
+    }));
+  }
   return { ok: res.ok, status: res.status, data };
 }
 

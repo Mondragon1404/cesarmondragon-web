@@ -205,6 +205,28 @@ module.exports = async function handler(req, res) {
     // La IP va en el log para poder ver en los logs de Vercel si los intentos
     // bloqueados vienen de un solo origen o de muchos.
     console.warn('SPAM_BLOCKED', JSON.stringify({ motivo: spam, nombre, email, ip }));
+
+    // Se avisa a n8n de que hemos frenado algo. Sin esto el vigilante seria
+    // CIEGO a los ataques que ya sabemos parar: mueren aqui y nunca llegan al
+    // workflow de leads, asi que no quedaria rastro de que estan ocurriendo.
+    //
+    // Se manda ip, motivo y nombre; ni el mensaje ni el email, que son de un
+    // tercero al que han usado de cebo y no hace falta guardar.
+    //
+    // Hay que esperarlo (await): en serverless el trabajo sin await se corta en
+    // cuanto la funcion responde. Nunca puede hacer fallar la peticion, asi que
+    // va envuelto en try/catch y con 2s de limite — es spam, no corre prisa.
+    try {
+      const corte = AbortSignal.timeout ? AbortSignal.timeout(2000) : undefined;
+      await fetch('https://mondragon-n8n.4ucpgb.easypanel.host/webhook/antispam-bloqueo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ip, motivo: spam, nombre }),
+        signal: corte,
+      });
+    } catch (e) {
+      console.warn('SPAM_LOG_FAILED', e && e.message);
+    }
     // 200 a propósito: si le devolvemos un error, el bot reintenta o se adapta.
     return res.status(200).json({ ok: true });
   }

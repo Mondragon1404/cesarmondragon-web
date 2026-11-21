@@ -185,11 +185,26 @@ module.exports = async function handler(req, res) {
     dt,
   } = req.body;
 
+  // IP real de quien envia. Hace falta pasarla: n8n esta detras de esta funcion,
+  // asi que lo unico que ve en su propio x-forwarded-for es la IP de SALIDA de
+  // Vercel, que ademas rota (98.84.44.6, 3.89.136.204... en la misma campana).
+  // Sin esto no hay forma de contar intentos por origen.
+  //
+  // Se coge el primer valor de x-forwarded-for: Vercel lo construye como
+  // "cliente, proxy1, proxy2", asi que el de la izquierda es el navegador. Los
+  // de la derecha los pone la infraestructura; los de mas a la izquierda que
+  // ese primero podria falsearlos el cliente, pero Vercel reescribe la cabecera.
+  const ip = String(req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || '')
+    .split(',')[0]
+    .trim();
+
   // Se descarta antes de tocar n8n, Airtable o Resend: el spam no debe generar
   // ni registro ni correo de confirmación a una dirección inventada.
   const spam = motivoDeSpam({ website, dt, nombre, empresa, email, mensaje, tipo_negocio, presupuesto });
   if (spam) {
-    console.warn('SPAM_BLOCKED', JSON.stringify({ motivo: spam, nombre, email }));
+    // La IP va en el log para poder ver en los logs de Vercel si los intentos
+    // bloqueados vienen de un solo origen o de muchos.
+    console.warn('SPAM_BLOCKED', JSON.stringify({ motivo: spam, nombre, email, ip }));
     // 200 a propósito: si le devolvemos un error, el bot reintenta o se adapta.
     return res.status(200).json({ ok: true });
   }
@@ -211,6 +226,7 @@ module.exports = async function handler(req, res) {
           presupuesto,
           servicios: Array.isArray(servicios) ? servicios : (servicios ? [servicios] : []),
           mensaje,
+          ip,
         }),
       }
     );

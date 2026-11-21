@@ -99,8 +99,33 @@ const PRESUPUESTOS = [
   'Menos de 500 EUR', '500-1500 EUR', '1500-3000 EUR', '3000-7000 EUR', '7000+ EUR',
 ];
 
+// Relleno de bot o de prueba: palabras que nadie escribe para pedir un presupuesto.
+// Se compara sobre el texto normalizado (minusculas, sin tildes, sin signos y con
+// los espacios colapsados), asi que "T E S T", "test!!!" y "Tést" caen igual.
+const RELLENO = /^(?:t+e+s+t+(?:ing)?|pruebas?|demo|(?:asd+f*)+|(?:qwer+t*y*)+|(?:zxc+)+|aaa+|xxx+|zzz+|1+2*3*|nada|sin mensaje|no|na)$/;
+
+// Solo para la primera palabra del nombre de empresa. Ahi "no" o "na" podrian
+// empezar un nombre real, pero "Test" o "Demo" no lo son nunca.
+const EMPRESA_PRUEBA = /^(?:t+e+s+t+(?:ing)?|pruebas?|demo|dummy|ejemplo|example|acme)$/;
+
+function normaliza(v) {
+  return String(v == null ? '' : v)
+    .toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+function esRelleno(v) {
+  const t = normaliza(v);
+  if (t === '') return false;
+  // Se prueba tambien sin espacios: el bot usa "T E S T" y "t-e-s-t" para
+  // esquivar comparaciones literales, y al normalizar quedan como "t e s t".
+  return RELLENO.test(t) || RELLENO.test(t.replace(/ /g, ''));
+}
+
 // Devuelve el motivo del descarte, o null si el envío parece humano.
-function motivoDeSpam({ website, dt, nombre, email, mensaje, tipo_negocio, presupuesto }) {
+function motivoDeSpam({ website, dt, nombre, empresa, email, mensaje, tipo_negocio, presupuesto }) {
   // 1. Honeypot: campo invisible para personas, irresistible para bots que rellenan todo.
   if (typeof website === 'string' && website.trim()) return 'honeypot relleno';
 
@@ -115,7 +140,21 @@ function motivoDeSpam({ website, dt, nombre, email, mensaje, tipo_negocio, presu
   if (!email || !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(String(email).trim())) return 'email malformado';
   if (!mensaje || !String(mensaje).trim()) return 'sin mensaje';
 
-  // 4. Tiempo de relleno. `dt` son los milisegundos que el formulario estuvo abierto,
+  // 4. Relleno de prueba. Campana del 20-11-2026: nombre "Test", empresa
+  //    "Test Company", mensaje "Test" y un email REAL distinto en cada envio.
+  //    Cada campo era valido por separado, asi que las reglas de arriba no lo
+  //    veian: 36 envios en 25 horas, todos guardados y todos con correo de
+  //    confirmacion enviado a un tercero que no habia pedido nada.
+  //    Va antes del tiempo de relleno a proposito: no depende de `dt`.
+  if (esRelleno(nombre)) return `nombre de relleno (${nombre})`;
+  if (esRelleno(mensaje)) return `mensaje de relleno (${mensaje})`;
+  if (esRelleno(empresa)) return `empresa de relleno (${empresa})`;
+  // "Test Company", "Test S.L.", "Testing SA": el relleno es la primera palabra.
+  // Se compara la palabra completa, no el prefijo, para no tocar "Testarossa
+  // Motors" ni "Protest Agency", que son nombres perfectamente plausibles.
+  if (EMPRESA_PRUEBA.test(normaliza(empresa).split(' ')[0])) return `empresa de prueba (${empresa})`;
+
+  // 5. Tiempo de relleno. `dt` son los milisegundos que el formulario estuvo abierto,
   //    medidos enteros en el navegador. NO comparar contra el reloj del servidor: los
   //    relojes de los clientes se desvian (el de César iba 93s adelantado) y eso
   //    bloqueaba leads reales. Si falta `dt` no bloqueamos: pagina cacheada.
@@ -148,7 +187,7 @@ module.exports = async function handler(req, res) {
 
   // Se descarta antes de tocar n8n, Airtable o Resend: el spam no debe generar
   // ni registro ni correo de confirmación a una dirección inventada.
-  const spam = motivoDeSpam({ website, dt, nombre, email, mensaje, tipo_negocio, presupuesto });
+  const spam = motivoDeSpam({ website, dt, nombre, empresa, email, mensaje, tipo_negocio, presupuesto });
   if (spam) {
     console.warn('SPAM_BLOCKED', JSON.stringify({ motivo: spam, nombre, email }));
     // 200 a propósito: si le devolvemos un error, el bot reintenta o se adapta.

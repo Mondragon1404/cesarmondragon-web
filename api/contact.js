@@ -198,13 +198,28 @@ module.exports = async function handler(req, res) {
     .split(',')[0]
     .trim();
 
+  // Pais de la IP, segun la geolocalizacion de Vercel (ISO 3166-1 de dos letras).
+  //
+  // ES INFORMATIVO: NO filtra nada, a proposito. La tentacion es rechazar lo que
+  // no sea 'ES', pero esta web declara areaServed Espana + Mexico + Argentina +
+  // Colombia + Peru, y el "Sobre mi" cuenta que el estudio empezo en Peru. Un
+  // bloqueo por pais cerraria la mitad del mercado que la propia web anuncia.
+  //
+  // Ademas un bloqueo duro pierde en SILENCIO: un cliente espanol con VPN de
+  // empresa o de roaming sale como extranjero y no te enteras. Si algun dia se
+  // activa, debe ser sumando puntos (queda 'dudoso' y avisa por Telegram), no
+  // rechazando.
+  //
+  // Se guarda para poder decidir con datos de donde vienen los ataques de verdad.
+  const pais = String(req.headers['x-vercel-ip-country'] || '').trim().toUpperCase();
+
   // Se descarta antes de tocar n8n, Airtable o Resend: el spam no debe generar
   // ni registro ni correo de confirmación a una dirección inventada.
   const spam = motivoDeSpam({ website, dt, nombre, empresa, email, mensaje, tipo_negocio, presupuesto });
   if (spam) {
     // La IP va en el log para poder ver en los logs de Vercel si los intentos
     // bloqueados vienen de un solo origen o de muchos.
-    console.warn('SPAM_BLOCKED', JSON.stringify({ motivo: spam, nombre, email, ip }));
+    console.warn('SPAM_BLOCKED', JSON.stringify({ motivo: spam, nombre, email, ip, pais }));
 
     // Se avisa a n8n de que hemos frenado algo. Sin esto el vigilante seria
     // CIEGO a los ataques que ya sabemos parar: mueren aqui y nunca llegan al
@@ -221,7 +236,7 @@ module.exports = async function handler(req, res) {
       await fetch('https://mondragon-n8n.4ucpgb.easypanel.host/webhook/antispam-bloqueo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ip, motivo: spam, nombre }),
+        body: JSON.stringify({ ip, pais, motivo: spam, nombre }),
         signal: corte,
       });
     } catch (e) {
@@ -249,6 +264,7 @@ module.exports = async function handler(req, res) {
           servicios: Array.isArray(servicios) ? servicios : (servicios ? [servicios] : []),
           mensaje,
           ip,
+          pais,
         }),
       }
     );

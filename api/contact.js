@@ -62,6 +62,50 @@ function emailStandard(nombre) {
   `);
 }
 
+// Version en texto plano de los dos correos. No es decorativa: sin ella el
+// mensaje viaja solo como HTML y eso pesa en los filtros de spam.
+function textoPriority(nombre) {
+  return [
+    'Hola ' + (nombre || '') + ',',
+    '',
+    'Gracias por escribirme. He recibido correctamente tu solicitud y revisare la',
+    'informacion de tu proyecto para entender mejor como puedo ayudarte.',
+    '',
+    'Para avanzar mas rapido puedes reservar directamente una llamada conmigo:',
+    'https://cal.com/cesar-mondragon/30min',
+    '',
+    'Durante la llamada podremos revisar tu negocio y objetivos, los bloqueos',
+    'actuales, las oportunidades de mejora y que solucion encaja mejor para ti.',
+    '',
+    'Si quieres anadir mas informacion sobre tu proyecto, puedes responder',
+    'directamente a este correo.',
+    '',
+    'Cesar Mondragon',
+    'Diseno, automatizacion e inteligencia artificial para negocios que quieren crecer.',
+  ].join('\n');
+}
+
+function textoStandard(nombre) {
+  return [
+    'Hola ' + (nombre || '') + ',',
+    '',
+    'Gracias por escribirme. He recibido correctamente tu solicitud y la revisare',
+    'personalmente en las proximas horas.',
+    '',
+    'Cada proyecto es diferente, asi que antes de proponerte nada quiero entender',
+    'bien tu situacion y asegurarme de que lo que puedo ofrecerte tiene sentido',
+    'real para ti.',
+    '',
+    'Me pondre en contacto contigo directamente. Si mientras tanto quieres',
+    'contarme algo mas, puedes responder a este correo.',
+    '',
+    'Hablamos pronto.',
+    '',
+    'Cesar Mondragon',
+    'Diseno, automatizacion e inteligencia artificial para negocios que quieren crecer.',
+  ].join('\n');
+}
+
 function isPriorityLead({ empresa, presupuesto, servicios }) {
   if (presupuesto === 'Menos de 500 EUR') return false;
   const serviciosList = Array.isArray(servicios) ? servicios : (servicios ? [servicios] : []);
@@ -69,14 +113,25 @@ function isPriorityLead({ empresa, presupuesto, servicios }) {
   return true;
 }
 
-async function sendEmail({ from, to, subject, html }) {
+async function sendEmail({ from, to, subject, html, text, replyTo }) {
+  // `text` no es opcional de verdad: un correo SOLO con HTML es una de las
+  // senales de spam mas clasicas, porque el correo legitimo casi siempre viaja
+  // en multipart (texto + HTML). Los dos correos de este formulario llegaban a
+  // la carpeta de spam de Gmail aun con SPF, DKIM y DMARC correctos.
+  //
+  // `replyTo` importa porque el cuerpo invita a responder: sin el, la respuesta
+  // se va a la direccion de envio y se pierde.
+  const payload = { from, to, subject, html };
+  if (text) payload.text = text;
+  if (replyTo) payload.reply_to = replyTo;
+
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ from, to, subject, html }),
+    body: JSON.stringify(payload),
   });
   const data = await res.json().catch(() => ({}));
 
@@ -299,12 +354,19 @@ module.exports = async function handler(req, res) {
       const emailHtml = priority
         ? emailPriority(nombre)
         : emailStandard(nombre);
+      const emailTexto = priority
+        ? textoPriority(nombre)
+        : textoStandard(nombre);
 
       await sendEmail({
         from,
         to: email,
         subject: 'He recibido tu solicitud',
         html: emailHtml,
+        text: emailTexto,
+        // El cuerpo dice "puedes responder a este correo": sin esto la
+        // respuesta se iria a la direccion de envio y se perderia.
+        replyTo: process.env.BUSINESS_EMAIL || undefined,
       });
     }
 
@@ -316,6 +378,21 @@ module.exports = async function handler(req, res) {
         from,
         to: businessEmail,
         subject: `${priority ? '⭐ ' : ''}Nuevo lead: ${nombre || 'sin nombre'}${empresa ? ' · ' + empresa : ''}`,
+        // Responder a este aviso escribe directamente al lead, no a uno mismo.
+        replyTo: email || undefined,
+        text: [
+          'Nuevo contacto desde la web',
+          '',
+          'Nombre: ' + (nombre || '-'),
+          'Empresa: ' + (empresa || '-'),
+          'Email: ' + (email || '-'),
+          'WhatsApp: ' + (whatsapp || '-'),
+          'Web / Instagram: ' + (web_instagram || '-'),
+          'Tipo de negocio: ' + (tipo_negocio || '-'),
+          'Presupuesto: ' + (presupuesto || '-'),
+          'Servicios: ' + serviciosStr,
+          'Mensaje: ' + (mensaje || '-'),
+        ].join('\n'),
         html: `
           <div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#222">
             <h2 style="color:#111">Nuevo contacto desde la web</h2>
